@@ -1,0 +1,576 @@
+{% extends 'base/body.html' %}
+{% load staticfiles %}
+{% block description %}
+    Visor de Monitoreo de Testigos de TV Azteca
+{% endblock %}
+{% block title %}
+    Monitoreo Autom&#225;tico de Testigos
+{% endblock %}
+{% block additionalheadexternalafter %}
+    <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
+
+    <link href="{% static 'dist/css/bootstrap-datetimepicker.css' %}" rel="stylesheet" media="screen">
+
+    <link href="{% static 'dist/css/jquery.dataTables.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'dist/css/select.dataTables.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'dist/css/dataTables.searchHighlight.css' %}" rel="stylesheet" media="screen">
+{% endblock %}
+{% block headername %}
+    Monitoreo Autom&#225;tico de Testigos
+{% endblock %}
+{% block headerbutton %}
+    <button type="button" class="btn navbar-btn btn-outline-success mr-sm-2"
+            onclick="javascript:buttonUpdate()">Actuzalizar
+    </button>
+    <button type="button" class="btn btn-outline-info mr-sm-2"
+            onclick="javascript:buttonCheck()">Revisar
+    </button>
+    <a class="btn btn-outline-danger mr-sm-2" href="{%  url 'close_login' %}">
+        Cerrar Sesi&#243;n
+    </a>
+{% endblock %}
+{% block section %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <div class="row justify-content-center">
+                    <div class="col-xl-2">
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                Red:
+                            </div>
+                            <div class="form-group col-md-12">
+                                <select id="list_red" class="combobox input-large form-control form-control-sm"
+                                        name="normal">
+                                    <option value="1" selected="selected">Todos</option>
+                                    <option value="2">Red 7</option>
+                                    <option value="3">Red 13</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                Tipo de Error:
+                            </div>
+                            <div class="form-group col-md-12">
+                                <select id="list_error" class="combobox input-large form-control form-control-sm"
+                                        name="normal">
+                                    <option value="1" selected="selected">Todos</option>
+                                    <option value="2">Duraci&#243;n</option>
+                                    <option value="3">No Llegan</option>
+                                    <option value="4">Tama&#241;o</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                Nivel de Alerta:
+                            </div>
+                            <div class="form-group col-md-12">
+                                <select id="list_alert" class="combobox input-large form-control form-control-sm"
+                                        name="normal">
+                                    <option value="1" selected="selected">Todos</option>
+                                    <option value="2">Bajos (Menor 11)</option>
+                                    <option value="3">Medios (11 - 100)</option>
+                                    <option value="4">Criticos (Mayor 100)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                Fecha Monitoreo:
+                            </div>
+                            <div class="input-group date form_date col-xl-12"
+                                 data-date-format="dd MM yyyy">
+                                <input class="form-control form-control-sm" size="16" type="text" value=""
+                                       readonly>
+                                <span class="input-group-addon"><span
+                                        class="glyphicon-remove"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <hr/>
+            </div>
+            <div class="col-xl-12">
+                <table class="table cell-border" id="datatable" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr align="center">
+                        <th><strong>NO</strong></th>
+                        <th><strong>NOMBRE</strong></th>
+                        <th><strong>ID</strong></th>
+                        <th><strong>MUX</strong></th>
+                        <th><strong>DURACI&Oacute;N</strong></th>
+                        <th><strong>NO LLEGAN</strong></th>
+                        <th><strong>TAMA&Ntilde;O</strong></th>
+                        <th><strong>TOTAL</strong></th>
+                        <th><strong>REVISADOS</strong></th>
+                        <th><strong>&UacuteLTIMO</strong></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal View-->
+    <div id="modalViewDetails" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <h5 id="title" class="modal-title"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="well well-sm" id="ip"></div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="well well-sm" id="shared"></div>
+
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="well well-sm" id="type"></div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="well well-sm" id="acronym"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table display compact cell-border" id="datatabledatails"
+                                               cellspacing="0"
+                                               width="100%">
+                                            <thead>
+                                            <tr align="center">
+                                                <th>NO</th>
+                                                <th>HORA</th>
+                                                <th>DURACI&Oacute;N</th>
+                                                <th>TAMA&Ntilde;O</th>
+                                                <th>TIPO ERROR</th>
+                                                <th>REVISADO</th>
+                                                <th>DESCARGAR</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+{% block additionalfooterexternalbefore %}
+    <script>window.jQuery || document.write('<script src="{%  static '/assets/js/vendor/jquery.min.js' %}"><\/script>')</script>
+{% endblock %}
+{% block additionalfooterexternalafter %}
+    <script type="text/javascript" src="{% static 'dist/js/jquery.dataTables.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/dataTables.select.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/dataTables.searchHighlight.min.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/jquery.highlight.js' %}" charset="UTF-8"></script>
+
+    <script type="text/javascript" src="{% static 'dist/js/bootstrap-datetimepicker.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/locales/bootstrap-datetimepicker.es.js' %}"
+            charset="UTF-8"></script>
+
+    <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" charset="UTF-8">
+
+        /**
+         * Created by Jose Daniel Hernandez Osorio - isc.danielosorio@hotmail.com -
+         * Ingeniero en Sistemas Copmutacionales.
+         */
+
+        var datatable;
+        var datatabledatails;
+
+        $(document).ready(
+            function () {
+
+                $("#list_red").change(function () {
+                    var data = getTypeRed();
+                    if (null != data) {
+                        update(search());
+                    }
+                });
+
+                $("#list_error").change(function () {
+                    var data = getTypeError();
+                    if (null != data) {
+                        update(search());
+                    }
+                });
+
+                $("#list_alert").change(function () {
+                    var data = getLevelAlert();
+                    if (null != data) {
+                        update(search());
+                    }
+                });
+
+                $('.combobox').combobox();
+
+                $('.form_date').datetimepicker({
+                    language: 'es',
+                    weekStart: 1,
+                    todayBtn: 1,
+                    autoclose: 1,
+                    startView: 2,
+                    minView: 2
+                }).datetimepicker("setDate", new Date()).datetimepicker(
+                    'setStartDate', '2016-11-01').datetimepicker('setEndDate', new Date()).on('changeDate', function (ev) {
+                    update(search());
+                });
+
+                var data = search();
+                update(data);
+
+                var row_danger;
+                var row;
+
+                $('#datatable tbody').on('click', 'tr', function () {
+                    if ($(this).hasClass('selected')) {
+                        $(row_danger).removeClass('selected');
+                        $(row_danger).addClass('table-info');
+                        $(row).removeClass('selected');
+                        $(row).addClass('table-info');
+                        var data = datatable.row(this).data();
+                        $("#modalViewDetails").modal('show');
+                        var number = data['ID'];
+                        var datatemporary = searchDetails(number);
+                        console.log('viewdetails ' + datatemporary);
+                        showDetails(datatemporary);
+                    } else {
+                        $(row_danger).removeClass('table-info');
+                        $(row).removeClass('table-info');
+                        $(row_danger).addClass('table-danger');
+                        if ($(this).hasClass('table-danger')) {
+                            row_danger = this;
+                            row = null
+                            $(this).removeClass('table-danger');
+                            datatable.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        } else {
+                            row = this;
+                            row_danger = null;
+                            datatable.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        }
+                    }
+                });
+
+                datatable.on('draw', function () {
+                    var body = $(datatable.table().body());
+                    body.unhighlight();
+                    body.highlight(datatable.search());
+                });
+
+                setInterval(function () {
+                    var datatemporary = search();
+                    console.log('viewfinder ' + datatemporary);
+                    update(datatemporary);
+                }, 600000);
+
+                $("#searchbox").on("keyup search input paste cut", function () {
+                    dataTable.search(this.value()).draw();
+                });
+
+            });
+
+        function update(datas) {
+
+            var number = 0;
+
+            var table = $('#datatable').DataTable();
+            table.destroy();
+
+            datatable = $('#datatable').DataTable({
+                "language": {
+                    select: {
+                        rows: {
+                            _: "%d filas seleccionadas",
+                            0: "Haga click en la fila para seleccionar",
+                            1: "1 fila seleccionada"
+                        }
+                    },
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+                "searchHighlight": true,
+                "scrollX": true,
+                "select": true,
+                "bLengthChange": false,
+                "processing": true,
+                "data": datas,
+                "pageLength": 20,
+                "createdRow": function (row, data, dataIndex) {
+                    number = number + 1;
+                    if ((data["TOTAL"] - data["REVISADOS"]) > 10)
+                        $(row).addClass('table-danger');
+                },
+                "sDom": '<"row"<"col-sm-3 text-center"f><"col-sm-9 text-center"p>>rti',
+                "columns": [
+                    {"data": "NO"},
+                    {"data": "NOMBRE"},
+                    {"data": "ID"},
+                    {"data": "MUX"},
+                    {"data": "DURACION"},
+                    {"data": "NOLLEGAN"},
+                    {"data": "TAMANO"},
+                    {"data": "TOTAL"},
+                    {"data": "REVISADOS"},
+                    {"data": "ULTIMO"}
+                ],
+                "columnDefs": [{
+                    className: "text-center folio",
+                    "targets": [0],
+                    "width": "5%"
+                }, {
+                    className: "text-center",
+                    "targets": [1],
+                    "width": "50%"
+                }, {
+                    className: "text-center",
+                    "targets": [2],
+                    "width": "8%"
+                }, {
+                    className: "text-center",
+                    "targets": [3],
+                    "width": "8%"
+                }, {
+                    className: "text-center",
+                    "targets": [4],
+                    "width": "10%"
+                }, {
+                    className: "text-center",
+                    "targets": [5],
+                    "width": "17%"
+                }, {
+                    className: "text-center",
+                    "targets": [6],
+                    "width": "7%"
+                }, {
+                    className: "text-center",
+                    "targets": [7],
+                    "width": "8%"
+                }, {
+                    className: "text-center",
+                    "targets": [8],
+                    "width": "10%"
+                }, {
+                    className: "text-center",
+                    "targets": [9],
+                    "width": "10%"
+                }],
+                "select": {
+                    style: "single"
+                },
+                "order": [[1, "asc"]]
+            });
+        }
+
+        function showDetails(datas) {
+
+            var table = $('#datatabledatails').DataTable();
+            table.destroy();
+
+            datatabledatails = $('#datatabledatails').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+                "bLengthChange": false,
+                "bFilter": false,
+                "processing": true,
+                "bInfo": true,
+                "data": datas,
+                "pageLength": 8,
+                "createdRow": function (row, data, dataIndex) {
+                    if (data["REVISADO"] == "NO") {
+                        $(row).addClass('table-danger');
+                    }
+                    $('#title').text(data["NOMBRE"]);
+                    $('#ip').text(" IP Grabador:  " + data["IP"]);
+                    $('#shared').text(" Compartido:  " + data["RUTA"]);
+                    var value = data["MUX"]
+                    if (value == "1")
+                        $('#type').text(" Tipo Multiplexor:  D2MUX");
+                    if (value == "2")
+                        $('#type').text(" Tipo Multiplexor:  DTP");
+                    if (value == "3")
+                        $('#type').text(" Tipo Multiplexor:  NE");
+                    $('#acronym').text(" Siglas:  " + data["SIGLAS"]);
+
+                },
+                "columns": [
+                    {"data": "NO"},
+                    {"data": "NUM_EVENTO"},
+                    {"data": "DURACION"},
+                    {"data": "TAMANO"},
+                    {"data": "TIPO_ERROR"},
+                    {"data": "REVISADO"},
+                    {"data": "DESCARGAR"}
+                ],
+                "columnDefs": [{
+                    className: "text-center folio",
+                    "targets": [0]
+                }, {
+                    className: "text-center",
+                    "targets": [1]
+                }, {
+                    className: "text-center",
+                    "targets": [2]
+                }, {
+                    className: "text-center",
+                    "targets": [3]
+                }, {
+                    className: "text-center",
+                    "targets": [4]
+                }, {
+                    className: "text-center",
+                    "targets": [5]
+                }, {
+                    className: "text-center",
+                    "targets": [6],
+                    "render": function (data, type, row, meta){
+                        var id = row["ID"];
+                        var date = getDateMonitoring();
+                        var event = row["EVENTO"];
+                        var url = row["RUTA"];
+                        url = url.split("\\");
+                        var name = row["NOMBRE_USUARIO"].replace("servidor", "");
+                        return "<a href=\"{% url 'get_media' %}" + id + "/" + date + "/" + event + "/" + url[4] + "/" + name+ "/\" class=\"alert-link\">Descargar</a>."
+                    }
+                }],
+                "order": [[1, "asc"]]
+            });
+
+        }
+
+        function search() {
+            return JSON.parse($.ajax({
+                type: "GET",
+                url: "json_00010",
+                data: {
+                    type_network: getTypeRed(),
+                    type_error: getTypeError(),
+                    level_alert: getLevelAlert(),
+                    date_monitoring: getDateMonitoring()
+                },
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data["error"])
+                        location.reload(true);
+                    return data;
+                }
+            }).responseText);
+        }
+
+        function searchDetails(id_testigo) {
+            return JSON.parse($.ajax({
+                type: "GET",
+                url: "json_00020",
+                data: {
+                    id_testigo: id_testigo,
+                    date_monitoring: getDateMonitoring()
+                },
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data["error"])
+                        location.reload(true);
+                    return data;
+                }
+            }).responseText);
+        }
+
+        function checkTestigo(id_testigo, check) {
+            $.ajax({
+                type: "GET",
+                url: "datecheck",
+                data: {
+                    id_testigo: id_testigo,
+                    check: check,
+                    date_monitoring: getDateMonitoring()
+                },
+                async: false,
+                success: function (data) {
+                    if (data["error"])
+                        location.reload(true);
+
+                    if (data["result1"] != 0 && data["result2"] != 0) {
+                        alert("Se ha realizado la revicion del testigo.");
+                        buttonUpdate();
+                    } else {
+                        alert("Posiblemente existe un error con la conexion de la base de datos.");
+                    }
+                }
+            });
+        }
+
+        function getTypeRed() {
+            var date = $('select[id=list_red]').val();
+            return date;
+        }
+
+        function getTypeError() {
+            var date = $('select[id=list_error]').val();
+            return date;
+        }
+
+        function getLevelAlert() {
+            var date = $('select[id=list_alert]').val();
+            return date;
+        }
+
+        function getDateMonitoring() {
+            var seldate = $('.form_date').datetimepicker('getDate');
+            seldate = seldate.getDate() + "-" + (seldate.getMonth() + 1) + "-" + seldate.getFullYear();
+            return seldate;
+        }
+
+        function buttonUpdate() {
+            datatemporary = search();
+            console.log(datatemporary);
+            update(datatemporary);
+        }
+
+        function buttonCheck() {
+            var data = datatable.row('.selected').data();
+            if (data != null) {
+                    var id = data['ID'];
+                    var all = data['TOTAL'];
+                    checkTestigo(id, all, getDateMonitoring());
+            } else {
+                alert("Debera de selecionar un Testigo");
+            }
+        }
+    </script>
+{% endblock %}
