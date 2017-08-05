@@ -188,3 +188,40 @@ def queryInsertBinnacle(id: str, operation: int, ip: str, employye: int, browser
     logging.getLogger('info_logger').info('--- CONSULTA SQL INSERT --- ' + sql)
 
     return sql
+
+def queyTableListWitness(channel: int):
+
+    sql = 'SELECT ROWNUM AS NO, ' \
+          'ID_TESTIGO AS ID, ' \
+          'NOMBRE_TESTIGO AS NOMBRE, ' \
+          'TIPO_MUX AS MUX ' \
+          'FROM ' \
+          'LISTA_TESTIGOS ' \
+          'WHERE '
+
+    condition = 'GRUPO_TESTIGOS=21 OR ' \
+                'GRUPO_TESTIGOS=22 OR ' \
+                'GRUPO_TESTIGOS=23 OR ' \
+                'GRUPO_TESTIGOS=24 OR ' \
+                'GRUPO_TESTIGOS=25 OR ' \
+                'GRUPO_TESTIGOS=26;'
+
+    if 1 == channel:
+        condition = 'GRUPO_TESTIGOS=21 OR ' \
+                    'GRUPO_TESTIGOS=23;'
+    if 2 == channel:
+        condition = 'GRUPO_TESTIGOS=22 OR ' \
+                    'GRUPO_TESTIGOS=24;'
+    if 3 == channel:
+        condition = 'GRUPO_TESTIGOS=25;'
+    if 4 == channel:
+        condition = 'GRUPO_TESTIGOS=26;'
+
+    sql = sql + condition
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+

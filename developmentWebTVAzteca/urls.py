@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', startLogin),
     url(r'^error/', error, name='error'),
-    url(r'^developmentwebtvazteca/', include('apps.tvazteca.cabs.login.urls'), name='login'),
-    url(r'^developmentwebtvazteca/cabs/', include('apps.tvazteca.cabs.viewfinderweb.urls'), name='viewfinderweb'),
+    url(r'^inventario_testigos/', include('apps.tvazteca.cabs.login.urls'), name='login'),
+    url(r'^inventario_testigos/monitoreo_testigos/', include('apps.tvazteca.cabs.viewfinderweb.urls'), name='viewfinderweb'),
+    url(r'^inventario_testigos/inicio/', include('apps.tvazteca.cabs.tracing.urls'), name='tracing'),
+    url(r'^inventario_testigos/reporte_testigo/', include('apps.tvazteca.cabs.reportwitness.urls'), name='reportwitness'),
 ]

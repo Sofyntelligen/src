@@ -4,7 +4,7 @@ from django_user_agents.utils import get_user_agent
 
 def getSO(request):
     user_agent = get_user_agent(request)
-    print(user_agent.os.family)
+    #print(user_agent.os.family)
 
     if user_agent.os.family == 'Windows 7':
         return 2
@@ -26,7 +26,7 @@ def getSO(request):
 
 def getBrowser(request):
     user_agent = get_user_agent(request)
-    print(user_agent.browser.family)
+    #print(user_agent.browser.family)
 
     if user_agent.browser.family == 'Chrome':
         return 2

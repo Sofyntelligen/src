@@ -18,7 +18,7 @@ def startLogin(request):
     logging.getLogger('info_logger').info('--- startLogin ---')
 
     if checkValue(request):
-        return HttpResponseRedirect('developmentwebtvazteca/cabs/viewweb/')
+        return HttpResponseRedirect('inventario_testigos/monitoreo_testigos/')
     else:
         return render(request, 'login/start_login.html')
 
@@ -74,7 +74,7 @@ def evaluationLogin(request):
                         query = queryInsertBinnacle(counter,  1, ip, int(request.session['id']), browser, os, '')
                         #queryDLL(query, 'tvazteca_bloq')
                         queryDLL(query, 'tvazteca_bloq')
-                        return HttpResponseRedirect('cabs/viewweb/')
+                        return HttpResponseRedirect('inicio/')
                     else:
                         query = queryInsertBinnacle(counter, 6, ip, 1, browser, os, '')
                         #queryDLL(query, 'tvazteca_bloq')

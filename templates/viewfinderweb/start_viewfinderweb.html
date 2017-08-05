@@ -15,18 +15,21 @@
     <link href="{% static 'dist/css/select.dataTables.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'dist/css/dataTables.searchHighlight.css' %}" rel="stylesheet" media="screen">
 {% endblock %}
-{% block headername %}
-    Monitoreo Autom&#225;tico de Testigos
-{% endblock %}
 {% block headerbutton %}
     <button type="button" class="btn navbar-btn btn-outline-success mr-sm-2"
-            onclick="javascript:buttonUpdate()">Actuzalizar
+            onclick="javascript:buttonUpdate()">Actualizar
     </button>
     <button type="button" class="btn btn-outline-info mr-sm-2"
             onclick="javascript:buttonCheck()">Revisar
     </button>
+    <a class="btn btn-outline-danger mr-sm-2" href="{%  url 'start_tracing' %}">
+        Regresar
+    </a>
     <a class="btn btn-outline-danger mr-sm-2" href="{%  url 'close_login' %}">
         Cerrar Sesi&#243;n
+    </a>
+    <a >
+        <img src="{%  static 'media/Usuario/usuario32.png' %}">
     </a>
 {% endblock %}
 {% block section %}
@@ -98,7 +101,10 @@
                 </div>
             </div>
             <div class="col-xl-12">
-                <hr/>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{%  url 'start_tracing' %}">Inventario de Testigos</a></li>
+                    <li class="breadcrumb-item active">Monitoreo Autom&#225;tico de Testigos</li>
+                </ol>
             </div>
             <div class="col-xl-12">
                 <table class="table cell-border" id="datatable" cellspacing="0"
@@ -274,7 +280,7 @@
                         $(row_danger).addClass('table-danger');
                         if ($(this).hasClass('table-danger')) {
                             row_danger = this;
-                            row = null
+                            row = null;
                             $(this).removeClass('table-danger');
                             datatable.$('tr.selected').removeClass('selected');
                             $(this).addClass('selected');
@@ -418,7 +424,7 @@
                     $('#title').text(data["NOMBRE"]);
                     $('#ip').text(" IP Grabador:  " + data["IP"]);
                     $('#shared').text(" Compartido:  " + data["RUTA"]);
-                    var value = data["MUX"]
+                    var value = data["MUX"];
                     if (value == "1")
                         $('#type').text(" Tipo Multiplexor:  D2MUX");
                     if (value == "2")
