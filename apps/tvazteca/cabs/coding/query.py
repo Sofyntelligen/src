@@ -199,22 +199,24 @@ def queyTableListWitness(channel: int):
           'LISTA_TESTIGOS ' \
           'WHERE '
 
-    condition = 'GRUPO_TESTIGOS=21 OR ' \
-                'GRUPO_TESTIGOS=22 OR ' \
-                'GRUPO_TESTIGOS=23 OR ' \
-                'GRUPO_TESTIGOS=24 OR ' \
-                'GRUPO_TESTIGOS=25 OR ' \
-                'GRUPO_TESTIGOS=26;'
+    if channel == '0':
+        condition = 'GRUPO_TESTIGOS=21 OR ' \
+                    'GRUPO_TESTIGOS=22 OR ' \
+                    'GRUPO_TESTIGOS=23 OR ' \
+                    'GRUPO_TESTIGOS=24 OR ' \
+                    'GRUPO_TESTIGOS=25 OR ' \
+                    'GRUPO_TESTIGOS=26;'
 
-    if 1 == channel:
+    if channel == '1':
         condition = 'GRUPO_TESTIGOS=21 OR ' \
                     'GRUPO_TESTIGOS=23;'
-    if 2 == channel:
+    if channel == '2':
         condition = 'GRUPO_TESTIGOS=22 OR ' \
                     'GRUPO_TESTIGOS=24;'
-    if 3 == channel:
+    if channel == '3':
         condition = 'GRUPO_TESTIGOS=25;'
-    if 4 == channel:
+
+    if channel == '4':
         condition = 'GRUPO_TESTIGOS=26;'
 
     sql = sql + condition
