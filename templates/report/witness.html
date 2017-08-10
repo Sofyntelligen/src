@@ -1,0 +1,131 @@
+{% extends 'base/body.html' %}
+{% load staticfiles %}
+{% block description %}
+    Formulario para realizar un reporte de un testigo con algun problema o con una configruacion pendiente.
+{% endblock %}
+{% block title %}
+    Reporte Testigo
+{% endblock %}
+{% block additionalheadexternalafter %}
+    <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
+{% endblock %}
+{% block headerbutton %}
+    <a class="btn btn-outline-success mr-sm-2" href="{%  url 'start_tracing' %}">
+        Regresar
+    </a>
+    <a data-toggle="tooltip"  title="{{ request.session.name }} <br> {{ request.session.number_employee }} <br> <a class='btn btn-outline-danger mr-sm-2' href='{%  url 'close_login' %}'>Cerrar Sesi&#243;n</a>" class="red-tooltip">
+        <img src="{%  static 'media/Usuario/usuario32.png' %}">
+    </a>
+{% endblock %}
+{% block section %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <div class="row">
+
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{%  url 'start_tracing' %}">Inventario de Testigos</a></li>
+                    <li class="breadcrumb-item active">Reporte Testigo</li>
+                </ol>
+            </div>
+            <form class="form-signin" method="POST" action="" id="form_account">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                <div class="col-xl-7">
+                    <div class="row justify-content-center">
+                        <label for="example-text-input" class="col-md-3 text-right">Tipo de Reporte:</label>
+                        <div class="col-md-9">
+                            <select id="list_red" class="combobox input-large form-control form-control-sm" name="normal">
+                                <option value="0" selected="selected">-- Seleccionar --</option>
+                            </select>
+                        </div>
+                        <label for="example-text-input" class="col-md-3 text-right">Sub Reporte:</label>
+                        <div class="col-md-9">
+                            <select id="list_red" class="combobox input-large form-control form-control-sm" name="normal">
+                                <option value="0" selected="selected">-- Seleccionar --</option>
+                            </select>
+                        </div>
+                        <label for="example-text-input" class="col-md-3 text-right">Accion:</label>
+                        <div class="col-md-9">
+                            <select id="list_red" class="combobox input-large form-control form-control-sm" name="normal">
+                                <option value="0" selected="selected">-- Seleccionar --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                        Reporte a RN
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check ">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                        Tarjeta WIN-TV entregada a RN
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                        Disco duro entregadio a RN
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                        CPU entregada a RN
+                                </label>
+                            </div>
+                        </div>
+                        <label for="example-text-input" class="col-md-12">Comentarios:</label>
+                        <div class="col-md-12">
+                            <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <br>
+                        </div>
+                        <button class="btn btn-lg btn-primary mr-sm-2" type="submit">Guardar</button>
+                        <a class="btn btn-lg btn-danger mr-sm-2" href="{%  url 'start_tracing' %}">
+                            Regresar
+                        </a>
+                    </div>
+                </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+{% block additionalfooterexternalbefore %}
+    <script>window.jQuery || document.write('<script src="{%  static '/assets/js/vendor/jquery.min.js' %}"><\/script>')</script>
+{% endblock %}
+{% block additionalfooterexternalafter %}
+    <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" charset="UTF-8">
+
+        /**
+         * Created by Jose Daniel Hernandez Osorio - isc.danielosorio@hotmail.com -
+         * Ingeniero en Sistemas Copmutacionales.
+         */
+
+        $(document).ready(
+            function () {
+
+            });
+
+    </script>
+{% endblock %}

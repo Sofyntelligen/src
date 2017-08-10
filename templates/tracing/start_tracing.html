@@ -1,0 +1,229 @@
+{% extends 'base/body.html' %}
+{% load staticfiles %}
+{% block description %}
+    Inventario de Testigoa de la red 7, 13, 40 y A+
+{% endblock %}
+{% block title %}
+    Inventario de Testigos
+{% endblock %}
+{% block additionalheadexternalafter %}
+    <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
+
+    <link href="{% static 'dist/css/jquery.dataTables.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'dist/css/select.dataTables.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'dist/css/dataTables.searchHighlight.css' %}" rel="stylesheet" media="screen">
+{% endblock %}
+{% block headerbutton %}
+    <button type="button" class="btn navbar-btn btn-outline-success mr-sm-2"
+            onclick="javascript:buttonUpdate()">Actualizar
+    </button>
+    <a class="btn btn-outline-info mr-sm-2" href="{%  url 'start_viewfinderweb' %}">
+        Monitor de Testigos
+    </a>
+    <a data-toggle="tooltip"  title="{{ request.session.name }} <br> {{ request.session.number_employee }} <br> <a class='btn btn-outline-danger mr-sm-2' href='{%  url 'close_login' %}'>Cerrar Sesi&#243;n</a>" class="red-tooltip">
+        <img src="{%  static 'media/Usuario/usuario32.png' %}">
+    </a>
+{% endblock %}
+{% block section %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <div class="row justify-content-center">
+                    <div class="col-xl-2">
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                Red:
+                            </div>
+                            <div class="form-group col-md-12">
+                                <select id="list_red" class="combobox input-large form-control form-control-sm"
+                                        name="normal">
+                                    <option value="0" selected="selected">Todos</option>
+                                    <option value="1">Red 7</option>
+                                    <option value="2">Red 13</option>
+                                    <option value="3">Red 40</option>
+                                    <option value="4">Red A+</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">Inventario de Testigos</li>
+                </ol>
+            </div>
+            <div class="col-xl-12">
+                <table class="table cell-border" id="datatable" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr align="center">
+                        <th><strong>NO</strong></th>
+                        <th><strong>ID TESTIGO</strong></th>
+                        <th><strong>NOMBRE</strong></th>
+                        <th><strong>MUX</strong></th>
+                        <th><strong>ESTADO</strong></th>
+                        <th><strong>REPORTE</strong></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+{% block additionalfooterexternalbefore %}
+    <script>window.jQuery || document.write('<script src="{%  static '/assets/js/vendor/jquery.min.js' %}"><\/script>')</script>
+{% endblock %}
+{% block additionalfooterexternalafter %}
+    <script type="text/javascript" src="{% static 'dist/js/jquery.dataTables.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/dataTables.select.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/dataTables.searchHighlight.min.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'dist/js/jquery.highlight.js' %}" charset="UTF-8"></script>
+
+    <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" charset="UTF-8">
+
+        /**
+         * Created by Jose Daniel Hernandez Osorio - isc.danielosorio@hotmail.com -
+         * Ingeniero en Sistemas Copmutacionales.
+         */
+
+        var datatable;
+
+        $(document).ready(
+            function () {
+
+                $("#list_red").change(function () {
+                    var data = getTypeRed();
+                    if (null != data) {
+                        update(search());
+                    }
+                });
+
+                $('.combobox').combobox();
+
+                var data = search();
+                update(data);
+
+                datatable.on('draw', function () {
+                    var body = $(datatable.table().body());
+                    body.unhighlight();
+                    body.highlight(datatable.search());
+                });
+
+                setInterval(function () {
+                    var datatemporary = search();
+                    console.log('viewfinder ' + datatemporary);
+                    update(datatemporary);
+                }, 600000);
+
+            });
+
+        function update(datas) {
+
+            var number = 0;
+
+            var table = $('#datatable').DataTable();
+            table.destroy();
+
+            datatable = $('#datatable').DataTable({
+                "language": {
+                    select: {
+                        rows: {
+                            _: "%d filas seleccionadas",
+                            0: "Haga click en la fila para seleccionar",
+                            1: "1 fila seleccionada"
+                        }
+                    },
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+                "searchHighlight": true,
+                "scrollX": true,
+                "select": true,
+                "bLengthChange": false,
+                "processing": true,
+                "data": datas,
+                "pageLength": 20,
+                "sDom": '<"row"<"col-sm-3 text-center"f><"col-sm-9 text-center"p>>rti',
+                "columns": [
+                    {"data": "NO"},
+                    {"data": "ID"},
+                    {"data": "NOMBRE"},
+                    {"data": "MUX"},
+                    {"data": "ESTADO"},
+                    {"data": "REPORTE"}
+                ],
+                "columnDefs": [{
+                    className: "text-center folio",
+                    "targets": [0],
+                    "width": "5%"
+                }, {
+                    className: "text-center",
+                    "targets": [1],
+                    "width": "10%"
+                }, {
+                    className: "text-center",
+                    "targets": [2],
+                    "width": "50%"
+                }, {
+                    className: "text-center",
+                    "targets": [3],
+                    "width": "8%"
+                }, {
+                    className: "text-center",
+                    "targets": [4],
+                    "render": function (data, type, row, meta){
+                        return "<a href=\"\" class=\"alert-link\">Estado</a>."
+                    }
+                }, {
+                    className: "text-center",
+                    "targets": [5],
+                    "width": "8%",
+                    "render": function (data, type, row, meta){
+                        return "<a href=\"\" class=\"btn btn-info\">Reporte</a> "
+                    }
+                }],
+                "select": {
+                    style: "single"
+                },
+                "order": [[2, "asc"]]
+            });
+        }
+
+        function search() {
+            return JSON.parse($.ajax({
+                type: "GET",
+                url: "json_00030",
+                data: {
+                    type_network: getTypeRed()
+                },
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data["error"])
+                        location.reload(true);
+                    return data;
+                }
+            }).responseText);
+        }
+
+        function getTypeRed() {
+            var date = $('select[id=list_red]').val();
+            return date;
+        }
+
+        function buttonUpdate() {
+            datatemporary = search();
+            console.log(datatemporary);
+            update(datatemporary);
+        }
+
+    </script>
+{% endblock %}
