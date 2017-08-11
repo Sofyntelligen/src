@@ -225,5 +225,27 @@ def queyTableListWitness(channel: int):
 
     return sql
 
+def querySubReport(type: int):
+
+    sql = 'SELECT ' \
+          'C.ID, C.SUB_REPORTE ' \
+          'FROM ' \
+          'CAT_REPORTES A, CAT_TIPO_REPORTE B, CAT_SUB_REPORTE C ' \
+          'WHERE ' \
+          'A.TIPO_REPORTE = B.ID AND A.SUB_REPORTE = C.ID AND A.TIPO_REPORTE = {type};'.format(type=type)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryTypeReport():
+
+    sql = 'SELECT * FROM CAT_TIPO_REPORTE;'
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
 
 

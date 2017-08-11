@@ -38,8 +38,11 @@
                     <div class="row justify-content-center">
                         <label for="example-text-input" class="col-md-3 text-right">Tipo de Reporte:</label>
                         <div class="col-md-9">
-                            <select id="list_red" class="combobox input-large form-control form-control-sm" name="normal">
+                            <select id="list_type_report" class="combobox input-large form-control form-control-sm" name="normal">
                                 <option value="0" selected="selected">-- Seleccionar --</option>
+                                {% for report in type_report %}
+                                    <option value="{{ report.ID }}">{{ report.TIPO_REPORTE }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <label for="example-text-input" class="col-md-3 text-right">Sub Reporte:</label>
@@ -125,7 +128,40 @@
         $(document).ready(
             function () {
 
+                $("#list_type_report").change(function () {
+                    list_sub_report()
+                });
+
             });
+
+        function list_sub_report() {
+            return JSON.parse($.ajax({
+                type: "GET",
+                url: "json_00040",
+                data: {
+                    type: getTypeReport()
+                },
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    var options = '<option disabled selected>Municipio</option>';
+                    for (var i in data){
+                        options += '<option value="'+ data[i].id + '">' + data[i].name + '</option>';
+                    }
+                    $(".Municipio optgroup").html(options);
+                    console.log(options);
+                    console.log(data);
+                }
+            }).responseText);
+        }
+
+        function getTypeReport() {
+            var date = $('select[id=list_type_report]').val();
+            return date;
+        }
+
+
+
 
     </script>
 {% endblock %}
