@@ -3,6 +3,7 @@ import logging
 
 from django.db import connections
 
+row = ''
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"

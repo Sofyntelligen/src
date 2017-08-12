@@ -187,7 +187,8 @@
                     "targets": [5],
                     "width": "8%",
                     "render": function (data, type, row, meta){
-                        return "<a href=\"\" class=\"btn btn-info btn-sm\">Reporte</a> "
+                        var id = row["ID"];
+                        return "<a href=\"{% url 'start_report_witness' %}" + id + "\" class=\"btn btn-info btn-sm\">Reporte</a>";
                     }
                 }],
                 "select": {

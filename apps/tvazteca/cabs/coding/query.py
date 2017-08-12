@@ -225,6 +225,7 @@ def queyTableListWitness(channel: int):
 
     return sql
 
+
 def querySubReport(type: int):
 
     sql = 'SELECT ' \
@@ -247,5 +248,32 @@ def queryTypeReport():
 
     return sql
 
+
+def queryDataWitness(id: int):
+
+    sql = 'SELECT ' \
+          'ID_TESTIGO, NOMBRE_TESTIGO, TIPO_MUX ' \
+          'FROM ' \
+          'LISTA_TESTIGOS ' \
+          'WHERE ' \
+          'ID_TESTIGO = {id};'.format(id=id)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryActionReport(id: int):
+
+    sql = 'SELECT ' \
+          'B.ID, B.ACCION ' \
+          'FROM ' \
+          'CAT_TIPO_REPORTE A, CAT_ACCIONES B, ACCIONES_REPORTES_TR C ' \
+          'WHERE ' \
+          'A.ID = C.TIPO_REPORTE AND B.ID = C.ACCION AND A.ID = {id};'.format(id=id)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
 
 
