@@ -10,11 +10,8 @@
     <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
 {% endblock %}
 {% block headerbutton %}
-    <a class="btn btn-outline-success mr-sm-2" href="{%  url 'start_tracing' %}">
+    <a class="btn btn-outline-warning mr-sm-2" href="{%  url 'start_tracing' %}">
         Regresar
-    </a>
-    <a data-toggle="tooltip"  title="{{ request.session.name }} <br> {{ request.session.number_employee }} <br> <a class='btn btn-outline-danger mr-sm-2' href='{%  url 'close_login' %}'>Cerrar Sesi&#243;n</a>" class="red-tooltip">
-        <img src="{%  static 'media/Usuario/usuario32.png' %}">
     </a>
 {% endblock %}
 {% block section %}
@@ -40,14 +37,14 @@
                     <li class="breadcrumb-item active">Reporte Testigo</li>
                 </ol>
             </div>
-            <form class="form-signin" method="POST" action="" id="form_account">
+            <form class="form-signin" method="POST" action="{% url 'insert_report' %}" id="form_report">
                 {% csrf_token %}
                 <div class="row justify-content-center">
                 <div class="col-xl-7">
                     <div class="row justify-content-center">
                         <label for="example-text-input" class="col-md-3 text-right">Tipo de Reporte:</label>
                         <div class="col-md-9">
-                            <select id="list_type_report" class="combobox input-large form-control form-control-sm" name="normal">
+                            <select id="list_type_report" class="combobox input-large form-control form-control-sm" name="list_type_report">
                                 <option value="0" selected="selected">-- Seleccionar --</option>
                                 {% for report in type_report %}
                                     <option value="{{ report.ID }}">{{ report.TIPO_REPORTE }}</option>
@@ -56,13 +53,13 @@
                         </div>
                         <label for="example-text-input" class="col-md-3 text-right">Sub Reporte:</label>
                         <div class="col-md-9">
-                            <select id="list_sub_report" class="combobox input-large form-control form-control-sm" name="normal">
+                            <select id="list_sub_report" class="combobox input-large form-control form-control-sm" name="list_sub_report">
                                 <option value="0" selected="selected">-- Seleccionar --</option>
                             </select>
                         </div>
                         <label for="example-text-input" class="col-md-3 text-right">Accion:</label>
                         <div class="col-md-9">
-                            <select id="list_action_report" class="combobox input-large form-control form-control-sm" name="normal">
+                            <select id="list_action_report" class="combobox input-large form-control form-control-sm" name="list_action_report">
                                 <option value="0" selected="selected">-- Seleccionar --</option>
                             </select>
                         </div>
@@ -72,7 +69,7 @@
                         <div class="col-md-6">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" >
+                                    <input class="form-check-input" type="radio" name="radios1" id="radios1" value="option1" >
                                         Reporte a RN
                                 </label>
                             </div>
@@ -80,7 +77,7 @@
                         <div class="col-md-6">
                             <div class="form-check ">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" >
+                                    <input class="form-check-input" type="radio" name="radios2" id="radios2" value="option1" >
                                         Tarjeta WIN-TV entregada a RN
                                 </label>
                             </div>
@@ -88,7 +85,7 @@
                         <div class="col-md-6">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" >
+                                    <input class="form-check-input" type="radio" name="radios3" id="radios3" value="option1" >
                                         Disco duro entregadio a RN
                                 </label>
                             </div>
@@ -96,19 +93,21 @@
                         <div class="col-md-6">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" >
+                                    <input class="form-check-input" type="radio" name="radios4" id="radios4" value="option1" >
                                         CPU entregada a RN
                                 </label>
                             </div>
                         </div>
                         <label for="example-text-input" class="col-md-12">Comentarios:</label>
                         <div class="col-md-12">
-                            <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                            <textarea class="form-control" id="commentArea" name="commentArea" rows="3"></textarea>
                         </div>
                         <div class="col-md-12">
                             <br>
                         </div>
-                        <button class="btn btn-lg btn-primary mr-sm-2" type="submit">Guardar</button>
+                        <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonForm()">
+                            Guardar
+                        </a>
                         <a class="btn btn-lg btn-danger mr-sm-2" href="{%  url 'start_tracing' %}">
                             Regresar
                         </a>
@@ -186,8 +185,6 @@
                     }
                     $("#list_action_report").html(options);
                     $("#list_action_report").trigger("change");
-                    console.log(options);
-                    console.log(data);
                 }
             }).responseText);
         }
@@ -205,6 +202,14 @@
         function getActionReport() {
             var date = $('select[id=list_action_report]').val();
             return date;
+        }
+
+        function buttonForm(){
+            if (getTypeReport() == 0 || getSubReport() == 0){
+                alert("Para Crear un Reporte es necesario como minimo ingresar \"Tipo de Reporte\" y \"Sub Reporte\"");
+            }else{
+                document.forms['form_report'].submit();
+            }
         }
 
     </script>

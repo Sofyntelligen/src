@@ -3,8 +3,6 @@ import logging
 
 from django.db import connections
 
-row = ''
-
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
     desc = cursor.description
@@ -15,6 +13,9 @@ def dictfetchall(cursor):
 
 
 def select(query: str, databases: str):
+
+    rows = ''
+
     try:
         querySQL = query
         cursor = connections[databases].cursor()

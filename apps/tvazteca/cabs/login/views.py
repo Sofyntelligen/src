@@ -18,7 +18,7 @@ def startLogin(request):
     logging.getLogger('info_logger').info('--- startLogin ---')
 
     if checkValue(request):
-        return HttpResponseRedirect('inventario_testigos/monitoreo_testigos/')
+        return HttpResponseRedirect('inventario_testigos/inicio/')
     else:
         return render(request, 'login/start_login.html')
 
