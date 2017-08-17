@@ -5,12 +5,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
+from apps.tvazteca.cabs.coding.databases.datas import getBrowser, getSO
 from apps.tvazteca.cabs.coding.encryption import Encryption
 from apps.tvazteca.cabs.coding.query import queryDetailsUser, queryInsertBinnacle
-from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
 from apps.tvazteca.cabs.coding.soap import Soap
 from apps.tvazteca.cabs.login.form import Login
-from apps.tvazteca.cabs.coding.databases.datas import getBrowser, getSO
+
 
 # Create your views here. https://github.com/sivaa/django-jquery-ajax-exmaples/tree/master/django-jquery-ajax/templates
 
@@ -53,10 +54,10 @@ def evaluationLogin(request):
                     '--- Error 404 - El servicio de autenticación no se encuentra disponible por el momento. ---')
                 return render(request, 'error/error.html', {'number': '404', 'message': 'No Encontrado',
                                                             'error': 'El servicio de autenticación no se encuentra disponible por el momento'})
-            #print(request.META)
+            # print(request.META)
             if '[Ok]' == result:
                 query = queryDetailsUser(soap['employee'][2])
-                #details = select(query, 'tvazteca_bloq')
+                # details = select(query, 'tvazteca_bloq')
                 details = select(query, 'tvazteca_bloq')
                 if len(details) == 1:
                     if details[0]['ACTIVO'] == 0:
@@ -71,33 +72,35 @@ def evaluationLogin(request):
                         request.session['active'] = details[0]['ACTIVO']
                         request.session['id'] = details[0]['ID']
                         request.session.set_expiry(1800)
-                        query = queryInsertBinnacle(counter,  1, ip, int(request.session['id']), browser, os, '')
-                        #queryDLL(query, 'tvazteca_bloq')
+                        query = queryInsertBinnacle(counter, 1, ip, int(request.session['id']), browser, os, '')
+                        # queryDLL(query, 'tvazteca_bloq')
                         queryDLL(query, 'tvazteca_bloq')
                         return HttpResponseRedirect('inicio/')
                     else:
                         query = queryInsertBinnacle(counter, 6, ip, 1, browser, os, '')
-                        #queryDLL(query, 'tvazteca_bloq')
+                        # queryDLL(query, 'tvazteca_bloq')
                         queryDLL(query, 'tvazteca_bloq')
-                        logging.getLogger('error_logger').info('--- El Usuario. No esta activo por lo tanto no tiene acceso al sistema, Verificar su acceso ---')
+                        logging.getLogger('error_logger').info(
+                            '--- El Usuario. No esta activo por lo tanto no tiene acceso al sistema, Verificar su acceso ---')
                         return render(request, 'login/start_login.html',
-                                      {'message_warning': 'El Usuario. No esta activo por lo tanto no tiene acceso al sistema, Verificar su acceso'})
+                                      {
+                                          'message_warning': 'El Usuario. No esta activo por lo tanto no tiene acceso al sistema, Verificar su acceso'})
                 else:
                     query = queryInsertBinnacle(counter, 5, ip, 1, browser, os, '')
-                    #queryDLL(query, 'tvazteca_bloq')
+                    # queryDLL(query, 'tvazteca_bloq')
                     queryDLL(query, 'tvazteca_bloq')
                     logging.getLogger('error_logger').info('--- El Usuario. No cuenta con privilegios para entrar ---')
                     return render(request, 'login/start_login.html',
                                   {'message_warning': 'El Usuario. No cuenta con privilegios para entrar'})
             elif '[Error]' == result:
                 query = queryInsertBinnacle(counter, 4, ip, 1, browser, os, '')
-                #queryDLL(query, 'tvazteca_bloq')
+                # queryDLL(query, 'tvazteca_bloq')
                 queryDLL(query, 'tvazteca_bloq')
                 logging.getLogger('error_logger').info('--- Contraseña incorrecta. Verficar ---')
                 return render(request, 'login/start_login.html', {'message_error': 'Contraseña incorrecta. Verficar'})
             elif '[Fail]' == result:
                 query = queryInsertBinnacle(counter, 3, ip, 1, browser, os, '')
-                #queryDLL(query, 'tvazteca_bloq')
+                # queryDLL(query, 'tvazteca_bloq')
                 queryDLL(query, 'tvazteca_bloq')
                 logging.getLogger('error_logger').info('--- Usuario y Contraseña incorrectos. Verficar ---')
                 return render(request, 'login/start_login.html',
@@ -131,11 +134,11 @@ def closeSession(request):
         counter = str(ckackCounter(request))
 
         query = queryInsertBinnacle(counter, 2, ip, id, browser, os, '')
-        #queryDLL(query, 'tvazteca_bloq')
+        # queryDLL(query, 'tvazteca_bloq')
         queryDLL(query, 'tvazteca_bloq')
     except:
         logging.getLogger('error_logger').info(
-           '--- Error 404 - El servicio de autenticación no se encuentra disponible por el momento. ---')
+            '--- Error 404 - El servicio de autenticación no se encuentra disponible por el momento. ---')
         return render(request, 'error/error.html', {'number': '400', 'message': 'Solicitud Incorrecta',
                                                     'error': 'Actualmente usted no tiene una sesión iniciada o se cerro su sesión por inactividad. Inicie Sesión'})
 
@@ -165,4 +168,3 @@ def ckackCounter(request):
     except:
         request.session['counter'] = 1
         return request.session['counter']
-

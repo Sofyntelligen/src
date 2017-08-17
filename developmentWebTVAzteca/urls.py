@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from apps.tvazteca.cabs.login.views import startLogin
 from apps.tvazteca.cabs.coding.view import error
+from apps.tvazteca.cabs.login.views import startLogin
 
 app_name = 'tvazteca'
 
@@ -26,7 +26,9 @@ urlpatterns = [
     url(r'^$', startLogin),
     url(r'^error/', error, name='error'),
     url(r'^inventario_testigos/', include('apps.tvazteca.cabs.login.urls'), name='login'),
-    url(r'^inventario_testigos/monitoreo_testigos/', include('apps.tvazteca.cabs.viewfinderweb.urls'), name='viewfinderweb'),
+    url(r'^inventario_testigos/monitoreo_testigos/', include('apps.tvazteca.cabs.viewfinderweb.urls'),
+        name='viewfinderweb'),
     url(r'^inventario_testigos/inicio/', include('apps.tvazteca.cabs.tracing.urls'), name='tracing'),
-    url(r'^inventario_testigos/reporte_testigo/', include('apps.tvazteca.cabs.reportwitness.urls'), name='reportwitness'),
+    url(r'^inventario_testigos/reporte_testigo/', include('apps.tvazteca.cabs.reportwitness.urls'),
+        name='reportwitness'),
 ]

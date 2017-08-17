@@ -106,6 +106,7 @@ def completeNumber(number):
 
     return number
 
+
 def convertToSecond(hour: int, minute: int, second: int):
     hour = hour * 3600
     minute = minute * 60

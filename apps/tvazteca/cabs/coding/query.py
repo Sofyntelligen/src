@@ -1,5 +1,5 @@
-import logging.config
 import logging
+import logging.config
 import time
 
 from apps.tvazteca.cabs.coding.util import *
@@ -177,20 +177,23 @@ def queryChangeTestigoDetails(id_testigo: str, date_monitoring: str):
 
 
 def queryInsertBinnacle(id: str, operation: int, ip: str, employye: int, browser: int, so: int, data: str):
-
     id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S") + id.rjust(4, '0')
 
     sql = 'INSERT INTO ' \
           'BIT_INVENT_TESTIGOS(ID, OPERACION, IP, ID_USUARIO, NAVEGADOR, SO, DATOS) ' \
           'VALUES ' \
-          '(\'{id}\', {operation}, \'{ip}\', {employye}, {browser}, {so}, \'{data}\');'.format(id=id, operation=operation, ip=ip, employye=employye, browser=browser, so=so, data=data)
+          '(\'{id}\', {operation}, \'{ip}\', {employye}, {browser}, {so}, \'{data}\');'.format(id=id,
+                                                                                               operation=operation,
+                                                                                               ip=ip, employye=employye,
+                                                                                               browser=browser, so=so,
+                                                                                               data=data)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL INSERT --- ' + sql)
 
     return sql
 
-def queyTableListWitness(channel: int):
 
+def queyTableListWitness(channel: int):
     sql = 'SELECT ROWNUM AS NO, ' \
           'ID_TESTIGO AS ID, ' \
           'NOMBRE_TESTIGO AS NOMBRE, ' \
@@ -227,7 +230,6 @@ def queyTableListWitness(channel: int):
 
 
 def querySubReport(type: int):
-
     sql = 'SELECT ' \
           'C.ID, C.SUB_REPORTE ' \
           'FROM ' \
@@ -241,7 +243,6 @@ def querySubReport(type: int):
 
 
 def queryTypeReport():
-
     sql = 'SELECT * FROM CAT_TIPO_REPORTE;'
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
@@ -250,7 +251,6 @@ def queryTypeReport():
 
 
 def queryDataWitness(id: int):
-
     sql = 'SELECT ' \
           'ID_TESTIGO, NOMBRE_TESTIGO, TIPO_MUX ' \
           'FROM ' \
@@ -264,7 +264,6 @@ def queryDataWitness(id: int):
 
 
 def queryActionReport(id: int):
-
     sql = 'SELECT ' \
           'B.ID, B.ACCION ' \
           'FROM ' \
@@ -275,5 +274,3 @@ def queryActionReport(id: int):
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
     return sql
-
-

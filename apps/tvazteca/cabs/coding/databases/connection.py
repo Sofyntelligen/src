@@ -1,7 +1,8 @@
-import logging.config
 import logging
+import logging.config
 
 from django.db import connections
+
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
@@ -13,7 +14,6 @@ def dictfetchall(cursor):
 
 
 def select(query: str, databases: str):
-
     rows = ''
 
     try:

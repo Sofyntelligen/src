@@ -50,15 +50,17 @@
                         {% endblock %}
                         <div class="btn-group">
                             <button type="button" class="btn btn-outline-danger btn-sm">
-                                <img src="{%  static 'media/Usuario/usuario30.png' %}">
+                                <img src="{% static 'media/Usuario/usuario30.png' %}">
                             </button>
-                            <button type="button" class="btn btn-outline-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-outline-danger dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <h6 class="dropdown-header">{{ request.session.name }}  <br> {{ request.session.number_employee }}</h6>
+                                <h6 class="dropdown-header">{{ request.session.name }}
+                                    <br> {{ request.session.number_employee }}</h6>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{%  url 'close_login' %}">Cerrar Sesi&#243;n</a>
+                                <a class="dropdown-item" href="{% url 'close_login' %}">Cerrar Sesi&#243;n</a>
                             </div>
                         </div>
                     </form>

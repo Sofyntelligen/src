@@ -22,7 +22,7 @@
     <button type="button" class="btn btn-outline-info mr-sm-2"
             onclick="javascript:buttonCheck()">Revisar
     </button>
-    <a class="btn btn-outline-warning mr-sm-2" href="{%  url 'start_tracing' %}">
+    <a class="btn btn-outline-warning mr-sm-2" href="{% url 'start_tracing' %}">
         Regresar
     </a>
 {% endblock %}
@@ -96,7 +96,7 @@
             </div>
             <div class="col-xl-12">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{%  url 'start_tracing' %}">Inventario de Testigos</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'start_tracing' %}">Inventario de Testigos</a></li>
                     <li class="breadcrumb-item active">Monitoreo Autom&#225;tico de Testigos</li>
                 </ol>
             </div>
@@ -458,14 +458,14 @@
                 }, {
                     className: "text-center",
                     "targets": [6],
-                    "render": function (data, type, row, meta){
+                    "render": function (data, type, row, meta) {
                         var id = row["ID"];
                         var date = getDateMonitoring();
                         var event = row["EVENTO"];
                         var url = row["RUTA"];
                         url = url.split("\\");
                         var name = row["NOMBRE_USUARIO"].replace("servidor", "");
-                        return "<a href=\"{% url 'get_media' %}" + id + "/" + date + "/" + event + "/" + url[4] + "/" + name+ "/\" class=\"alert-link\">Descargar</a>."
+                        return "<a href=\"{% url 'get_media' %}" + id + "/" + date + "/" + event + "/" + url[4] + "/" + name + "/\" class=\"alert-link\">Descargar</a>."
                     }
                 }],
                 "order": [[1, "asc"]]
@@ -565,9 +565,9 @@
         function buttonCheck() {
             var data = datatable.row('.selected').data();
             if (data != null) {
-                    var id = data['ID'];
-                    var all = data['TOTAL'];
-                    checkTestigo(id, all, getDateMonitoring());
+                var id = data['ID'];
+                var all = data['TOTAL'];
+                checkTestigo(id, all, getDateMonitoring());
             } else {
                 alert("Debera de selecionar un Testigo");
             }

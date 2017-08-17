@@ -1,17 +1,16 @@
-import logging.config
-import logging
 import json
+import logging
+import logging.config
 
-
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse
-
-from apps.tvazteca.cabs.coding.util import *
-from apps.tvazteca.cabs.login.views import checkValue, ckackCounter
-from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, queryDataWitness, queryActionReport
-from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
-from apps.tvazteca.cabs.reportwitness.form import ReportWitness
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+
+from apps.tvazteca.cabs.coding.databases.connection import select
+from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, queryDataWitness, queryActionReport
+from apps.tvazteca.cabs.coding.util import *
+from apps.tvazteca.cabs.login.views import checkValue
+from apps.tvazteca.cabs.reportwitness.form import ReportWitness
+
 
 # Create your views here.
 
@@ -30,7 +29,7 @@ def startReportWitness(request, id=None):
         return render(request, 'report/witness.html', {'type_report': type_report, 'witness': witness})
     else:
         return render(request, 'login/start_login.html', {
-                'message_warning': 'Para poder crear un reporte de un testigo se necesita iniciar sesión'})
+            'message_warning': 'Para poder crear un reporte de un testigo se necesita iniciar sesión'})
 
 
 def listSubReportJSON(request):
@@ -89,4 +88,4 @@ def insertReportWitness(request):
         if form.is_valid():
             print('entrando al formulario2')
 
-    return render(request, 'tracing/start_tracing.html')
+    return HttpResponseRedirect('/inventario_testigos/inicio/')

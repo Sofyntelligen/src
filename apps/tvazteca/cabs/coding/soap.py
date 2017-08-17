@@ -25,4 +25,3 @@ class Soap:
                 return {'result': '[Ok]', 'employee': date_result}
             else:
                 return {'result': '[Error]'}
-

@@ -1,5 +1,7 @@
 from django.conf.urls import url
-from apps.tvazteca.cabs.reportwitness.views import startReportWitness, listSubReportJSON, listActionReportJSON, insertReportWitness
+
+from apps.tvazteca.cabs.reportwitness.views import startReportWitness, listSubReportJSON, listActionReportJSON, \
+    insertReportWitness
 
 urlpatterns = [
     url(r'^(?P<id>\S+)/$', startReportWitness, name='start_report_witness_id'),

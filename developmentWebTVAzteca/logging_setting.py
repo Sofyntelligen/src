@@ -1,4 +1,5 @@
 import os
+
 from developmentWebTVAzteca.settings import BASE_DIR
 
 LOGGING = {
