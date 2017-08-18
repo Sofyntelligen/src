@@ -5,20 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="
-    {% block description %}
-    {% endblock %}
-    ">
+    <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="author"
           content="Hernandez Osorio Jose Daniel - isc.danielosorio@hotmail.com - Ingeniero en Sistemas Computacionales">
-    <link rel="icon" type="image/ico" href="
-    {% block icon %}
-    {% endblock %}
-    ">
-    <title>
-        {% block title %}
-        {% endblock %}
-    </title>
+    <link rel="icon" type="image/ico" href="{% block icon %}{% endblock %}">
+    <title>{% block title %}{% endblock %}</title>
     {% block additionalheadexternalbefore %}
     {% endblock %}
     <link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet">

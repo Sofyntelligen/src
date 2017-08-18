@@ -1,22 +1,12 @@
 {% extends 'base/body.html' %}
-
 {% load staticfiles %}
-
-{% block description %}
-    Pagina principal de Logeo para entrar a las aplicaciones de CABS
-{% endblock %}
-
-{% block title %}
-    Inicio de Sessi&oacute;n CABS
-{% endblock %}
-
+{% block description %}Pagina principal de Logeo para entrar a las aplicaciones de CABS{% endblock %}
+{% block title %}Inicio de Sessi&oacute;n CABS{% endblock %}
 {% block additionalheadexternalafter %}
     <link href="{% static 'dist/css/signin.css' %}" rel="stylesheet">
 {% endblock %}
-
 {% block header %}
 {% endblock %}
-
 {% block section %}
     <div class="container">
         <form class="form-signin" method="POST" action="{% url 'login' %}" id="form_account">
@@ -56,7 +46,6 @@
         </form>
     </div>
 {% endblock %}
-
 {% block javascript %}
     <script type="text/javascript" charset="UTF-8">
 

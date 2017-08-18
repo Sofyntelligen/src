@@ -274,3 +274,28 @@ def queryActionReport(id: int):
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
     return sql
+
+def queryCheckReports(id: int):
+    sql = 'SELECT ' \
+          'A.NUMERO_EMPLEADO AS EMPLEADO, ' \
+          'A.NOMBRE AS NOMBRE, ' \
+          'B.ID AS ID_REPORTE, ' \
+          'B.FECHA AS FECHA, ' \
+          'B.ID_TESTIGO AS ID_TESTIGO, ' \
+          'C.ESTADO AS ESTADO, ' \
+          'D.ID AS ID, ' \
+          'E.ID AS ID_TIPO_REPORTE, ' \
+          'E.TIPO_REPORTE, ' \
+          'F.ID AS ID_SUB_REPORTE, ' \
+          'F.SUB_REPORTE ' \
+          'FROM ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
+          'WHERE ' \
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id};'.format(id=id)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+

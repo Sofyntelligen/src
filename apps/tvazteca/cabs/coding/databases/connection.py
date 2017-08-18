@@ -24,7 +24,7 @@ def select(query: str, databases: str):
         rows = dictfetchall(cursor)
         cursor.close()
     except:
-        logging.getLogger('error_logger').info(
+        logging.getLogger('info_logger').error(
             '--- Error SQL - Datos no Insertados ---', querySQL)
 
     return rows
@@ -37,7 +37,7 @@ def queryDLL(query: str, databases: str):
         cursor.execute(querySQL)
         connections[databases].commit()
     except:
-        logging.getLogger('error_logger').info(
+        logging.getLogger('info_logger').error(
             '--- Error SQL - Datos no Insertados ---', querySQL)
 
     return str(cursor.rowcount)

@@ -1,11 +1,7 @@
 {% extends 'base/body.html' %}
 {% load staticfiles %}
-{% block description %}
-    Formulario para realizar un reporte de un testigo con algun problema o con una configruacion pendiente.
-{% endblock %}
-{% block title %}
-    Reporte Testigo
-{% endblock %}
+{% block description %}Formulario para realizar un reporte de un testigo con algun problema o con una configruacion pendiente.{% endblock %}
+{% block title %}Reporte Testigo{% endblock %}
 {% block additionalheadexternalafter %}
     <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
 {% endblock %}
@@ -92,19 +88,19 @@
                                         <div class="col-md-6">
                                             <div class="form-check">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="radio" name="radios1"
+                                                    <input class="form-check-input" type="radio" name="option"
                                                            id="radios1"
-                                                           value="option1">
+                                                           value="0">
                                                     Reporte a RN
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-check ">
+                                            <div class="form-check">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="radio" name="radios2"
+                                                    <input class="form-check-input" type="radio" name="option"
                                                            id="radios2"
-                                                           value="option1">
+                                                           value="1">
                                                     Tarjeta WIN-TV entregada a RN
                                                 </label>
                                             </div>
@@ -112,9 +108,9 @@
                                         <div class="col-md-6">
                                             <div class="form-check">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="radio" name="radios3"
+                                                    <input class="form-check-input" type="radio" name="option"
                                                            id="radios3"
-                                                           value="option1">
+                                                           value="2">
                                                     Disco duro entregadio a RN
                                                 </label>
                                             </div>
@@ -122,17 +118,17 @@
                                         <div class="col-md-6">
                                             <div class="form-check">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="radio" name="radios4"
+                                                    <input class="form-check-input" type="radio" name="option"
                                                            id="radios4"
-                                                           value="option1">
+                                                           value="3">
                                                     CPU entregada a RN
                                                 </label>
                                             </div>
                                         </div>
                                         <label for="example-text-input" class="col-md-12">Comentarios:</label>
                                         <div class="col-md-12">
-                                    <textarea class="form-control" id="commentArea" name="commentArea"
-                                              rows="3"></textarea>
+                                            <textarea class="form-control" id="commentArea" name="commentArea"
+                                                      rows="3"></textarea>
                                         </div>
                                         <div class="col-md-12">
                                             <br>
@@ -151,28 +147,12 @@
                 </div>
                 <div class="tab-pane fade" id="historical" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="col-xl-12">
-                        <table class="table cell-border" id="datatable" cellspacing="0"
-                               width="100%">
-                            <thead>
-                            <tr align="center">
-                                <th><strong>TIPO REPORTE</strong></th>
-                                <th><strong>SUB REPORTE</strong></th>
-                                <th><strong>ACCION</strong></th>
-                                <th><strong>ESTADO</strong></th>
-                                <th><strong>COMENTARIO</strong></th>
-                                <th><strong>USUARIO</strong></th>
-                                <th><strong>FECHA</strong></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                        TIPO DE REPORTE SUBTIPO REPORTE ACCION ESTADO COMENTARIO QUIEN FECHA
+                        /
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 {% endblock %}
 {% block additionalfooterexternalbefore %}

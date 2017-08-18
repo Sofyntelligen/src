@@ -50,7 +50,7 @@ def evaluationLogin(request):
                 soap = resultSoap.accessLogin()
                 result = soap['result']
             except:
-                logging.getLogger('error_logger').info(
+                logging.getLogger('info_logger').error(
                     '--- Error 404 - El servicio de autenticación no se encuentra disponible por el momento. ---')
                 return render(request, 'error/error.html', {'number': '404', 'message': 'No Encontrado',
                                                             'error': 'El servicio de autenticación no se encuentra disponible por el momento'})
@@ -80,7 +80,7 @@ def evaluationLogin(request):
                         query = queryInsertBinnacle(counter, 6, ip, 1, browser, os, '')
                         # queryDLL(query, 'tvazteca_bloq')
                         queryDLL(query, 'tvazteca_bloq')
-                        logging.getLogger('error_logger').info(
+                        logging.getLogger('info_logger').error(
                             '--- El Usuario. No esta activo por lo tanto no tiene acceso al sistema, Verificar su acceso ---')
                         return render(request, 'login/start_login.html',
                                       {
@@ -89,20 +89,20 @@ def evaluationLogin(request):
                     query = queryInsertBinnacle(counter, 5, ip, 1, browser, os, '')
                     # queryDLL(query, 'tvazteca_bloq')
                     queryDLL(query, 'tvazteca_bloq')
-                    logging.getLogger('error_logger').info('--- El Usuario. No cuenta con privilegios para entrar ---')
+                    logging.getLogger('info_logger').error('--- El Usuario. No cuenta con privilegios para entrar ---')
                     return render(request, 'login/start_login.html',
                                   {'message_warning': 'El Usuario. No cuenta con privilegios para entrar'})
             elif '[Error]' == result:
                 query = queryInsertBinnacle(counter, 4, ip, 1, browser, os, '')
                 # queryDLL(query, 'tvazteca_bloq')
                 queryDLL(query, 'tvazteca_bloq')
-                logging.getLogger('error_logger').info('--- Contraseña incorrecta. Verficar ---')
+                logging.getLogger('info_logger').error('--- Contraseña incorrecta. Verficar ---')
                 return render(request, 'login/start_login.html', {'message_error': 'Contraseña incorrecta. Verficar'})
             elif '[Fail]' == result:
                 query = queryInsertBinnacle(counter, 3, ip, 1, browser, os, '')
                 # queryDLL(query, 'tvazteca_bloq')
                 queryDLL(query, 'tvazteca_bloq')
-                logging.getLogger('error_logger').info('--- Usuario y Contraseña incorrectos. Verficar ---')
+                logging.getLogger('info_logger').error('--- Usuario y Contraseña incorrectos. Verficar ---')
                 return render(request, 'login/start_login.html',
                               {'message_error': 'Usuario y Contraseña incorrectos. Verficar'})
 
@@ -137,7 +137,7 @@ def closeSession(request):
         # queryDLL(query, 'tvazteca_bloq')
         queryDLL(query, 'tvazteca_bloq')
     except:
-        logging.getLogger('error_logger').info(
+        logging.getLogger('info_logger').error(
             '--- Error 404 - El servicio de autenticación no se encuentra disponible por el momento. ---')
         return render(request, 'error/error.html', {'number': '400', 'message': 'Solicitud Incorrecta',
                                                     'error': 'Actualmente usted no tiene una sesión iniciada o se cerro su sesión por inactividad. Inicie Sesión'})
