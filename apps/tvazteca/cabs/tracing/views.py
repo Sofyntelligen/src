@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from apps.tvazteca.cabs.coding.databases.connection import select
-from apps.tvazteca.cabs.coding.query import queyTableListWitness
+from apps.tvazteca.cabs.coding.query import queyTableListWitness, queryCheckReports
 from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue
 
@@ -35,12 +35,18 @@ def dateTableTracingJSON(request):
     type_network = request.GET.get('type_network')
 
     query = queyTableListWitness(type_network)
-    # dates = select(query, 'tvazteca_vidnotd')
-    dates = select(query, 'tvazteca_bloq')
+    # datas = select(query, 'tvazteca_vidnotd')
+    datas = select(query, 'tvazteca_bloq')
 
-    for i in range(len(dates)):
-        dates[i]['MUX'] = optionMux(dates[i]['MUX'])
-
-    json_data = json.dumps(dates)
+    for i in range(len(datas)):
+        datas[i]['MUX'] = optionMux(datas[i]['MUX'])
+        query = queryCheckReports(datas[i]['ID'])
+        # datas = select(query, 'tvazteca_vidnotd')
+        data = select(query, 'tvazteca_bloq')
+        if data:
+            datas[i]['ID_REPORTE'] = data[0]['ID']
+        else:
+            datas[i]['ID_REPORTE'] = 0
+    json_data = json.dumps(datas)
 
     return HttpResponse(json_data, content_type='application/json')

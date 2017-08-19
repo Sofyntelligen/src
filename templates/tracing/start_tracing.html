@@ -173,7 +173,13 @@
                     className: "text-center",
                     "targets": [4],
                     "render": function (data, type, row, meta) {
-                        return "<a href=\"\" class=\"alert-link\">Estado</a>."
+                        var id = row["ID_REPORTE"];
+                        if (id == 0 ) {
+                            return "Sin Reportes Pendientes.";
+                        }else{
+                            return "<a href=\"\" class=\"alert-link\">" + id +"</a>";
+                        }
+
                     }
                 }, {
                     className: "text-center",

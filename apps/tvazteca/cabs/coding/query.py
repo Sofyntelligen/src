@@ -275,6 +275,7 @@ def queryActionReport(id: int):
 
     return sql
 
+
 def queryCheckReports(id: int):
     sql = 'SELECT ' \
           'A.NUMERO_EMPLEADO AS EMPLEADO, ' \
@@ -291,7 +292,33 @@ def queryCheckReports(id: int):
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
           'WHERE ' \
-          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id};'.format(id=id)
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id};'.format(
+        id=id)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryinsertReport(witness: int, id_user: int, report: int, state: int):
+    id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
+
+    sql = 'INSERT INTO REPORTES_TESTIGOS(ID, ID_TESTIGO, ID_USUARIO, REPORTE, ESTADO) VALUES({id}, {witness}, {id_user}, {report}, 1);'.format(
+        id=id, witness=witness, id_user=id_user, report=report, state=state)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryReportID(id_type_report: int, id_sub_report: int):
+    sql = 'SELECT ' \
+          'A.ID ' \
+          'FROM ' \
+          'CAT_REPORTES A, CAT_TIPO_REPORTE B, CAT_SUB_REPORTE C ' \
+          'WHERE ' \
+          'A.TIPO_REPORTE = B.ID AND A.SUB_REPORTE = C.ID AND A.TIPO_REPORTE = {id_type_report} AND A.SUB_REPORTE = {id_sub_report};'.format(
+        id_type_report=id_type_report, id_sub_report=id_sub_report)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 

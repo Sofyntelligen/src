@@ -28,6 +28,11 @@ def startLogin(request):
 def evaluationLogin(request):
     logging.getLogger('info_logger').info('--- evaluationLogin ---')
 
+    browser = getBrowser(request)
+    os = getSO(request)
+    ip = request.META['REMOTE_ADDR']
+    counter = str(ckackCounter(request))
+
     if request.method == 'POST':
         form = Login(request.POST)
         if form.is_valid():
@@ -39,11 +44,6 @@ def evaluationLogin(request):
             inputEmployee = encryption.getEncryption()
             encryption.setData(inputPassword)
             inputPassword = encryption.getEncryption()
-
-            browser = getBrowser(request)
-            os = getSO(request)
-            ip = request.META['REMOTE_ADDR']
-            counter = str(ckackCounter(request))
 
             try:
                 resultSoap = Soap(inputEmployee, inputPassword)
@@ -71,7 +71,7 @@ def evaluationLogin(request):
                         request.session['permission'] = details[0]['PERMISOS']
                         request.session['active'] = details[0]['ACTIVO']
                         request.session['id'] = details[0]['ID']
-                        request.session.set_expiry(1800)
+                        request.session.set_expiry(30000)
                         query = queryInsertBinnacle(counter, 1, ip, int(request.session['id']), browser, os, '')
                         # queryDLL(query, 'tvazteca_bloq')
                         queryDLL(query, 'tvazteca_bloq')
@@ -105,6 +105,14 @@ def evaluationLogin(request):
                 logging.getLogger('info_logger').error('--- Usuario y Contraseña incorrectos. Verficar ---')
                 return render(request, 'login/start_login.html',
                               {'message_error': 'Usuario y Contraseña incorrectos. Verficar'})
+        else:
+            query = queryInsertBinnacle(counter, 3, ip, 1, browser, os, '')
+            # queryDLL(query, 'tvazteca_bloq')
+            queryDLL(query, 'tvazteca_bloq')
+            logging.getLogger('info_logger').error('--- Usuario y Contraseña incorrectos. Verficar ---')
+            return render(request, 'login/start_login.html',
+                          {'message_error': 'Usuario y Contraseña incorrectos. Verficar'})
+
 
     return render(request, 'login/start_login.html')
 
