@@ -156,26 +156,50 @@
                 </div>
                 <div class="tab-pane fade" id="historical" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="col-xl-12">
-                        <table class="table cell-border" id="datatable" cellspacing="0"
-                               width="100%">
-                            <thead>
-                            <tr align="center">
-                                <th><strong>TIPO REPORTE</strong></th>
-                                <th><strong>SUB REPORTE</strong></th>
-                                <th><strong>ACCION</strong></th>
-                                <th><strong>ESTADO</strong></th>
-                                <th><strong>COMENTARIO</strong></th>
-                                <th><strong>USUARIO</strong></th>
-                                <th><strong>FECHA</strong></th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                        <div class="row justify-content-center">
+                            <table class="table cell-border" id="datatable" cellspacing="0"
+                                   width="100%">
+                                <thead>
+                                <tr align="center">
+                                    <th><strong>TIPO REPORTE</strong></th>
+                                    <th><strong>SUB REPORTE</strong></th>
+                                    <th><strong>ACCION</strong></th>
+                                    <th><strong>ESTADO</strong></th>
+                                    <th><strong>COMENTARIO</strong></th>
+                                    <th><strong>USUARIO</strong></th>
+                                    <th><strong>FECHA</strong></th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+                </div>
             {% endif %}
+        </div>
+    </div>
+    <!-- Modal message -->
+    <div id="modalmessage" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmaci&#243;n</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Esta seguro de realizar un reporte, para el testigo con nombre
+                        {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="javascript:buttonConfirmation()">Aceptar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -265,7 +289,7 @@
                     type: "GET",
                     url: "{% url 'list_history' %}",
                     data: {
-                        id_witness: 488
+                        {% for data in witness %}id_witness: {{ data.ID_TESTIGO }}{% endfor %}
                     },
                     dataType: 'json',
                     async: false,
@@ -358,8 +382,12 @@
             if (getTypeReport() == 0 || getSubReport() == 0) {
                 alert("Para Crear un Reporte es necesario como minimo ingresar \"Tipo de Reporte\" y \"Sub Reporte\"");
             } else {
-                document.forms['form_report'].submit();
+                $("#modalmessage").modal('show');
             }
+        }
+
+        function buttonConfirmation() {
+            document.forms['form_report'].submit();
         }
 
     </script>

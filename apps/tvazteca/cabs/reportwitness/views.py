@@ -94,6 +94,7 @@ def listHistory(request):
     datas[0]['FECHA'] = datas[0]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
     datas[0]['ACCION'] = 'N/A'
     datas[0]['COMENTARIO'] = 'N/A'
+    print(datas)
 
     json_data = json.dumps(datas)
 
