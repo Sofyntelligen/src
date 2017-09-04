@@ -141,9 +141,18 @@
                                 <div class="col-md-12">
                                     <br>
                                 </div>
-                                <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonForm()">
-                                    Guardar
-                                </a>
+                                {% if buttom %}
+                                    <a class="btn btn-lg btn-warning mr-sm-2" onclick="javascript:buttonForm()">
+                                        Terminar
+                                    </a>
+                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonForm()">
+                                        Actualizar
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonForm()">
+                                        Guardar
+                                    </a>
+                                {% endif %}
                                 <a class="btn btn-lg btn-danger mr-sm-2" href="{% url 'start_tracing' %}">
                                     Regresar
                                 </a>
@@ -363,7 +372,6 @@
                     "select": {
                         style: "single"
                     },
-                    "order": [[2, "asc"]]
                 });
             }
         {% endif %}
@@ -381,15 +389,17 @@
             var date = $('select[id=list_action_report]').val();
             return date;
         }
+        {% if buttom %}
 
-        function buttonForm() {
-            if (getTypeReport() == 0 || getSubReport() == 0) {
-                alert("Para Crear un Reporte es necesario como minimo ingresar \"Tipo de Reporte\" y \"Sub Reporte\"");
-            } else {
-                $("#modalmessage").modal('show');
+        {% else %}
+            function buttonForm() {
+                if (getTypeReport() == 0 || getSubReport() == 0) {
+                    alert("Para Crear un Reporte es necesario como minimo ingresar \"Tipo de Reporte\" y \"Sub Reporte\"");
+                } else {
+                    $("#modalmessage").modal('show');
+                }
             }
-        }
-
+        {% endif %}
         function buttonConfirmation() {
             document.forms['form_report'].submit();
         }

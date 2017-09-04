@@ -10,6 +10,7 @@ from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, que
     queryCheckReports, queryReportID, queryInsertReport, queryInsertComment, queryInsertAction, queryHistory
 from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue
+from apps.tvazteca.cabs.objects.history import History
 
 
 # Create your views here.
@@ -31,12 +32,21 @@ def startReportWitness(request, id=None):
         query = queryCheckReports(id)
         report = select(query, 'tvazteca_bloq')
         if report:
-            for i in range(len(report)):
-                details = report[i]['FECHA'] = report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
-                details += ' por ' + report[i]['NOMBRE']
-            print(report)
-            return render(request, 'report/witness.html',
-                          {'type_report': type_report, 'witness': witness, 'history': True, 'details': details})
+            if report[len(report) - 1]['ESTADO'] != 'FINALIZADO':
+                for i in range(len(report)):
+                    details = report[i]['FECHA'] = report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+                    details += ' por ' + report[i]['NOMBRE']
+                print(report)
+                return render(request, 'report/witness.html',
+                              {'type_report': type_report, 'witness': witness, 'history': True, 'buttom': True,
+                               'details': details})
+            else:
+                for i in range(len(report)):
+                    details = report[i]['FECHA'] = report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+                    details += ' por ' + report[i]['NOMBRE']
+                print(report)
+                return render(request, 'report/witness.html',
+                              {'type_report': type_report, 'witness': witness, 'history': True})
         else:
             return render(request, 'report/witness.html', {'type_report': type_report, 'witness': witness})
     else:
@@ -95,49 +105,35 @@ def listHistory(request):
     # datas = select(query, 'tvazteca_vidnotd')
     datas_report = select(query, 'tvazteca_bloq')
 
-    history = []
-    comment = True
-    action = True
-    count = 0
+    history = History()
 
     for i in range(len(datas_report)):
-        datas_report[i]['FECHA'] = datas_report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
-        history.append(datas_report[i])
         id_report = datas_report[i]['ID_REPORTE']
+
+        history.setTypeReport(datas_report[i]['TIPO_REPORTE'])
+        history.setSubReport(datas_report[i]['SUB_REPORTE'])
+        history.state = datas_report[i]['ESTADO']
+        history.user = datas_report[i]['NOMBRE']
+        history.date = datas_report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+
         query = queryHistory(id_report)
         # datas = select(query, 'tvazteca_vidnotd')
         data_history = select(query, 'tvazteca_bloq')
+
         if data_history:
             for x in range(len(data_history)):
                 data_history[x]['FECHA'] = data_history[x]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
-                print(history[count]['FECHA'])
-                print(data_history[x]['FECHA'])
-                if data_history[x]['FECHA'] == history[count]['FECHA']:
-                    if data_history[x]['TIPO'] == 'COMENTARIO':
-                        history[count]['COMENTARIO'] = data_history[x]['TAREA']
-                        comment = False
-                    if data_history[x]['TIPO'] == 'ACCION':
-                        history[count]['ACCION'] = data_history[x]['TAREA']
-                        action = False
-                else:
-                    if comment:
-                        history[count]['COMENTARIO'] = 'N/A'
-                    else:
-                        comment = True
-                    if action:
-                        history[count]['ACCION'] = 'N/A'
-                    else:
-                        action = True
-                    temporary = history[count]
-                    print('')
+                history.checkUpdateHistory(data_history[x])
+            history.addHistory()
         else:
-            history[count]['COMENTARIO'] = 'N/A'
-            history[count]['ACCION'] = 'N/A'
+            history.addHistory()
 
+        history.comment = ''
+        history.action = ''
 
     print(data_history)
 
-    json_data = json.dumps(history)
+    json_data = json.dumps(history.getHistory())
 
     return HttpResponse(json_data, content_type='application/json')
 
