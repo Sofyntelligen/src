@@ -194,12 +194,19 @@ def queryInsertBinnacle(id: str, operation: int, ip: str, employye: int, browser
 
 
 def queyTableListWitness(channel: int):
-    sql = 'SELECT ROWNUM AS NO, ' \
-          'ID_TESTIGO AS ID, ' \
-          'NOMBRE_TESTIGO AS NOMBRE, ' \
-          'TIPO_MUX AS MUX ' \
+    sql = 'SELECT ' \
+          'ROWNUM AS NO, ' \
+          'TESTIGOS.ID_TESTIGO AS ID, ' \
+          'TESTIGOS.NOMBRE_TESTIGO AS NOMBRE, ' \
+          'TESTIGOS.TIPO_MUX AS MUX, ' \
+          '(SELECT ' \
+          'D.ID ' \
           'FROM ' \
-          'LISTA_TESTIGOS ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
+          'WHERE ' \
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = TESTIGOS.ID_TESTIGO) AS ID_REPORTE ' \
+          'FROM ' \
+          'LISTA_TESTIGOS TESTIGOS ' \
           'WHERE '
 
     if channel == '0':
@@ -300,15 +307,37 @@ def queryCheckReports(id: int):
     return sql
 
 
-def queryinsertReport(witness: int, id_user: int, report: int, state: int):
+def queryInsertAction(id_user: int, report: int, action: int):
     id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
 
-    sql = 'INSERT INTO REPORTES_TESTIGOS(ID, ID_TESTIGO, ID_USUARIO, REPORTE, ESTADO) VALUES({id}, {witness}, {id_user}, {report}, 1);'.format(
-        id=id, witness=witness, id_user=id_user, report=report, state=state)
+    sql = 'INSERT INTO ACCIONES_REPORTES(ID, ID_USUARIO, REPORTE, ACCION) VALUES ({id}, {id_user}, {report}, {action});'.format(
+        id=id, id_user=id_user, report=report, action=action)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
     return sql
+
+
+def queryInsertComment(id_user: int, report: int, comment: str):
+    id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
+
+    sql = 'INSERT INTO COMENTARIOS_REPORTES(ID, ID_USUARIO, REPORTE, COMENTARIO) VALUES ({id}, {id_user}, {report}, \'{comment}\');'.format(
+        id=id, id_user=id_user, report=report, comment=comment)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryInsertReport(witness: int, id_user: int, report: int, state: int):
+    id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
+
+    sql = 'INSERT INTO REPORTES_TESTIGOS(ID, ID_TESTIGO, ID_USUARIO, REPORTE, ESTADO) VALUES ({id}, {witness}, {id_user}, {report}, 1);'.format(
+        id=id, witness=witness, id_user=id_user, report=report, state=state)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return {'0': sql, '1': id}
 
 
 def queryReportID(id_type_report: int, id_sub_report: int):
@@ -325,4 +354,29 @@ def queryReportID(id_type_report: int, id_sub_report: int):
     return sql
 
 
+def queryAccion(id_report: int):
+    sql = 'SELECT ' \
+          'A.NUMERO_EMPLEADO, A.NOMBRE, B.ID, B.FECHA, B.ID_TESTIGO, C.FECHA, C.COMENTARIO ' \
+          'FROM ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, COMENTARIOS_REPORTES C ' \
+          'WHERE ' \
+          'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND B.ID = {id} ' \
+          'ORDER BY B.FECHA;'.format(id=id_report)
 
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryComment(id_report: int):
+    sql = 'SELECT ' \
+          'A.NUMERO_EMPLEADO, A.NOMBRE, B.ID, B.FECHA, B.ID_TESTIGO, C.FECHA, D.ACCION ' \
+          'FROM ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, ACCIONES_REPORTES C, CAT_ACCIONES D ' \
+          'WHERE ' \
+          'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND C.ACCION = D.ID AND B.ID = {id} ' \
+          'ORDER BY B.FECHA;'.format(id_=id_report)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql

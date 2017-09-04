@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
 from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, queryDataWitness, queryActionReport, \
-    queryCheckReports, queryReportID, queryinsertReport
+    queryCheckReports, queryReportID, queryInsertReport, queryInsertComment, queryInsertAction
 from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue
 
@@ -31,9 +31,12 @@ def startReportWitness(request, id=None):
         query = queryCheckReports(id)
         report = select(query, 'tvazteca_bloq')
         if report:
+            for i in range(len(report)):
+                details = report[i]['FECHA'] = report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+                details += ' por ' + report[i]['NOMBRE']
             print(report)
             return render(request, 'report/witness.html',
-                          {'type_report': type_report, 'witness': witness, 'history': True})
+                          {'type_report': type_report, 'witness': witness, 'history': True, 'details': details})
         else:
             return render(request, 'report/witness.html', {'type_report': type_report, 'witness': witness})
     else:
@@ -84,21 +87,24 @@ def listActionReportJSON(request):
 
     return HttpResponse(json_data, content_type='application/json')
 
+
 def listHistory(request):
     id_witness = request.GET.get('id_witness')
 
     query = queryCheckReports(id_witness)
     # datas = select(query, 'tvazteca_vidnotd')
-    datas = select(query, 'tvazteca_bloq')
-    print(datas)
-    datas[0]['FECHA'] = datas[0]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
-    datas[0]['ACCION'] = 'N/A'
-    datas[0]['COMENTARIO'] = 'N/A'
-    print(datas)
+    datas_report = select(query, 'tvazteca_bloq')
 
-    json_data = json.dumps(datas)
+    datas_report[0]['FECHA'] = datas_report[0]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+    id_report = datas_report[0]['ID_REPORTE']
+    datas_report[0]['ACCION'] = 'N/A'
+    datas_report[0]['COMENTARIO'] = 'N/A'
+    print(datas_report)
+
+    json_data = json.dumps(datas_report)
 
     return HttpResponse(json_data, content_type='application/json')
+
 
 def insertReportWitness(request):
     logging.getLogger('info_logger').info('--- insertReportWitness ---')
@@ -113,15 +119,28 @@ def insertReportWitness(request):
         # dates = select(query, 'tvazteca_vidnotd')
         data = select(query, 'tvazteca_bloq')
         report = data[0]['ID']
+
+        query = queryInsertReport(witness, id_user, report, 1)
+        # dates = select(query, 'tvazteca_vidnotd')
+        id_report = query['1']
+        queryDLL(query['0'], 'tvazteca_bloq')
+
         action = request.POST['list_action_report']
+        if '0' != action:
+            query = queryInsertAction(id_user, id_report, action)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
         try:
             rn = request.POST['option']
+            print(rn)
         except:
             rn = 0
-        comment = request.POST['commentArea']
 
-        query = queryinsertReport(witness, id_user, report, 1)
-        # dates = select(query, 'tvazteca_vidnotd')
-        queryDLL(query, 'tvazteca_bloq')
+        comment = request.POST['commentArea']
+        if comment:
+            query = queryInsertComment(id_user, id_report, comment)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
 
     return HttpResponseRedirect('/inventario_testigos/inicio/')

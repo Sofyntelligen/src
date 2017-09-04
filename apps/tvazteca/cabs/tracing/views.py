@@ -40,12 +40,7 @@ def dateTableTracingJSON(request):
 
     for i in range(len(datas)):
         datas[i]['MUX'] = optionMux(datas[i]['MUX'])
-        query = queryCheckReports(datas[i]['ID'])
-        # datas = select(query, 'tvazteca_vidnotd')
-        data = select(query, 'tvazteca_bloq')
-        if data:
-            datas[i]['ID_REPORTE'] = data[0]['ID']
-        else:
+        if datas[i]['ID_REPORTE'] is None:
             datas[i]['ID_REPORTE'] = 0
     json_data = json.dumps(datas)
     print(datas)

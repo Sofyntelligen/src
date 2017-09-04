@@ -151,30 +151,34 @@
                         </div>
                     </div>
                 </form>
+                {% if history %}
+                    <div class="col-xl-12 text-right" style="color: #aa0000">
+                        <br>
+                        Reporte levantado el {{ details }}
+                    </div>
+                {% endif %}
             </div>
             {% if history %}
                 </div>
                 <div class="tab-pane fade" id="historical" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="col-xl-12">
-                        <div class="row justify-content-center">
-                            <table class="table cell-border" id="datatable" cellspacing="0"
-                                   width="100%">
-                                <thead>
-                                <tr align="center">
-                                    <th><strong>TIPO REPORTE</strong></th>
-                                    <th><strong>SUB REPORTE</strong></th>
-                                    <th><strong>ACCION</strong></th>
-                                    <th><strong>ESTADO</strong></th>
-                                    <th><strong>COMENTARIO</strong></th>
-                                    <th><strong>USUARIO</strong></th>
-                                    <th><strong>FECHA</strong></th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                        <table class="table cell-border" id="datatable" cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr align="center">
+                                <th><strong>TIPO REPORTE</strong></th>
+                                <th><strong>SUB REPORTE</strong></th>
+                                <th><strong>ACCION</strong></th>
+                                <th><strong>ESTADO</strong></th>
+                                <th><strong>COMENTARIO</strong></th>
+                                <th><strong>USUARIO</strong></th>
+                                <th><strong>FECHA</strong></th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 </div>
