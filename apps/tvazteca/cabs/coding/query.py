@@ -354,28 +354,21 @@ def queryReportID(id_type_report: int, id_sub_report: int):
     return sql
 
 
-def queryAccion(id_report: int):
+def queryHistory(id_report: int):
     sql = 'SELECT ' \
-          'A.NUMERO_EMPLEADO, A.NOMBRE, B.ID, B.FECHA, B.ID_TESTIGO, C.FECHA, C.COMENTARIO ' \
+          'A.NOMBRE, B.ID, C.FECHA AS FECHA, C.COMENTARIO AS TAREA, \'COMENTARIO\' AS TIPO ' \
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, COMENTARIOS_REPORTES C ' \
           'WHERE ' \
-          'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND B.ID = {id} ' \
-          'ORDER BY B.FECHA;'.format(id=id_report)
-
-    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
-
-    return sql
-
-
-def queryComment(id_report: int):
-    sql = 'SELECT ' \
-          'A.NUMERO_EMPLEADO, A.NOMBRE, B.ID, B.FECHA, B.ID_TESTIGO, C.FECHA, D.ACCION ' \
+          'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND B.ID = {id_report} ' \
+          'UNION ALL( ' \
+          'SELECT ' \
+          'A.NOMBRE, B.ID, C.FECHA AS FECHA, D.ACCION  AS TAREA, \'ACCION\' AS TIPO ' \
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, ACCIONES_REPORTES C, CAT_ACCIONES D ' \
           'WHERE ' \
-          'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND C.ACCION = D.ID AND B.ID = {id} ' \
-          'ORDER BY B.FECHA;'.format(id_=id_report)
+          'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND C.ACCION = D.ID AND B.ID = {id_report}) ' \
+          'ORDER BY FECHA;'.format(id_report=id_report)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 

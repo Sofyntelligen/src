@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
 from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, queryDataWitness, queryActionReport, \
-    queryCheckReports, queryReportID, queryInsertReport, queryInsertComment, queryInsertAction
+    queryCheckReports, queryReportID, queryInsertReport, queryInsertComment, queryInsertAction, queryHistory
 from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue
 
@@ -95,13 +95,49 @@ def listHistory(request):
     # datas = select(query, 'tvazteca_vidnotd')
     datas_report = select(query, 'tvazteca_bloq')
 
-    datas_report[0]['FECHA'] = datas_report[0]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
-    id_report = datas_report[0]['ID_REPORTE']
-    datas_report[0]['ACCION'] = 'N/A'
-    datas_report[0]['COMENTARIO'] = 'N/A'
-    print(datas_report)
+    history = []
+    comment = True
+    action = True
+    count = 0
 
-    json_data = json.dumps(datas_report)
+    for i in range(len(datas_report)):
+        datas_report[i]['FECHA'] = datas_report[i]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+        history.append(datas_report[i])
+        id_report = datas_report[i]['ID_REPORTE']
+        query = queryHistory(id_report)
+        # datas = select(query, 'tvazteca_vidnotd')
+        data_history = select(query, 'tvazteca_bloq')
+        if data_history:
+            for x in range(len(data_history)):
+                data_history[x]['FECHA'] = data_history[x]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
+                print(history[count]['FECHA'])
+                print(data_history[x]['FECHA'])
+                if data_history[x]['FECHA'] == history[count]['FECHA']:
+                    if data_history[x]['TIPO'] == 'COMENTARIO':
+                        history[count]['COMENTARIO'] = data_history[x]['TAREA']
+                        comment = False
+                    if data_history[x]['TIPO'] == 'ACCION':
+                        history[count]['ACCION'] = data_history[x]['TAREA']
+                        action = False
+                else:
+                    if comment:
+                        history[count]['COMENTARIO'] = 'N/A'
+                    else:
+                        comment = True
+                    if action:
+                        history[count]['ACCION'] = 'N/A'
+                    else:
+                        action = True
+                    temporary = history[count]
+                    print('')
+        else:
+            history[count]['COMENTARIO'] = 'N/A'
+            history[count]['ACCION'] = 'N/A'
+
+
+    print(data_history)
+
+    json_data = json.dumps(history)
 
     return HttpResponse(json_data, content_type='application/json')
 

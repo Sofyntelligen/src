@@ -43,6 +43,5 @@ def dateTableTracingJSON(request):
         if datas[i]['ID_REPORTE'] is None:
             datas[i]['ID_REPORTE'] = 0
     json_data = json.dumps(datas)
-    print(datas)
 
     return HttpResponse(json_data, content_type='application/json')
