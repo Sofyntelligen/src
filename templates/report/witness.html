@@ -39,23 +39,6 @@
                     <li class="breadcrumb-item active">Reporte Testigo</li>
                 </ol>
             </div>
-            {% if history %}
-                <div class="col-xl-12">
-                    <ul class="nav nav-tabs justify-content-end" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#report" role="tab"
-                               aria-controls="home" aria-expanded="true">Reporte</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#historical" role="tab"
-                               aria-controls="profile">Historico</a>
-                        </li>
-                    </ul>
-                    <br>
-                </div>
-                <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="report" role="tabpanel" aria-labelledby="home-tab">
-            {% endif %}
             <div class="col-xl-12">
                 <form class="form-signin" method="POST" action="{% url 'insert_report' %}" id="form_report">
                     {% csrf_token %}
@@ -67,10 +50,13 @@
                                 <div class="col-md-9">
                                     <select id="list_type_report"
                                             class="combobox input-large form-control form-control-sm"
-                                            name="list_type_report">
-                                        <option value="0" selected="selected">-- Seleccionar --</option>
+                                            name="list_type_report" {% if buttom %}disabled{% endif %}>
+                                        <option value="0" {% if not buttom %}selected="selected" {% endif %}>--
+                                            Seleccionar --
+                                        </option>
                                         {% for report in type_report %}
-                                            <option value="{{ report.ID }}">{{ report.TIPO_REPORTE }}</option>
+                                            <option value="{{ report.ID }}"
+                                                    {% if id_type_report == report.ID %}selected="selected" {% endif %}>{{ report.TIPO_REPORTE }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -78,8 +64,16 @@
                                 <div class="col-md-9">
                                     <select id="list_sub_report"
                                             class="combobox input-large form-control form-control-sm"
-                                            name="list_sub_report">
-                                        <option value="0" selected="selected">-- Seleccionar --</option>
+                                            name="list_sub_report" {% if buttom %}disabled{% endif %}>
+                                        {% if buttom %}
+                                            <option value="0">-- Seleccionar --</option>
+                                            {% for sub in sub_report %}
+                                                <option value="{{ sub.ID }}"
+                                                        {% if id_sub_report == sub.ID %}selected="selected" {% endif %}>{{ sub.SUB_REPORTE }}</option>
+                                            {% endfor %}
+                                        {% else %}
+                                            <option value="0" selected="selected">-- Seleccionar --</option>
+                                        {% endif %}
                                     </select>
                                 </div>
                                 <label for="example-text-input" class="col-md-3 text-right">Accion:</label>
@@ -87,7 +81,22 @@
                                     <select id="list_action_report"
                                             class="combobox input-large form-control form-control-sm"
                                             name="list_action_report">
-                                        <option value="0" selected="selected">-- Seleccionar --</option>
+                                        {% if buttom %}
+                                            {% if action %}
+                                                <option value="0">-- Seleccionar --</option>
+                                                {% for actions in action_report %}
+                                                    <option value="{{ actions.ID }}"
+                                                            {% if action == actions.ACCION %}selected="selected" {% endif %}>{{ actions.ACCION }}</option>
+                                                {% endfor %}
+                                            {% else %}
+                                                <option value="0" selected="selected">-- Seleccionar --</option>
+                                                {% for actions in action_report %}
+                                                    <option value="{{ actions.ID }}">{{ actions.ACCION }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <option value="0" selected="selected">-- Seleccionar --</option>
+                                        {% endif %}
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -98,7 +107,7 @@
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="radio" name="option"
                                                    id="radios1"
-                                                   value="0">
+                                                   value="0" {% if id_state == 0 %}checked {% endif %}>
                                             Reporte a RN
                                         </label>
                                     </div>
@@ -108,7 +117,7 @@
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="radio" name="option"
                                                    id="radios2"
-                                                   value="1">
+                                                   value="1" {% if id_state == 1 %}checked {% endif %}>
                                             Tarjeta WIN-TV entregada a RN
                                         </label>
                                     </div>
@@ -118,7 +127,7 @@
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="radio" name="option"
                                                    id="radios3"
-                                                   value="2">
+                                                   value="2" {% if id_state == 2 %}checked {% endif %}>
                                             Disco duro entregadio a RN
                                         </label>
                                     </div>
@@ -128,28 +137,45 @@
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="radio" name="option"
                                                    id="radios4"
-                                                   value="3">
+                                                   value="3" {% if id_state == 3 %}checked {% endif %}>
                                             CPU entregada a RN
                                         </label>
                                     </div>
                                 </div>
                                 <label for="example-text-input" class="col-md-12">Comentarios:</label>
+                                {% if buttom %}
+                                    {% if comments %}
+                                        {% for key, value in comments.items %}
+                                            <label for="example-text-input" class="col-md-12"> -- {{ key }} comentario
+                                                : {{ value }} </label>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
                                 <div class="col-md-12">
                                             <textarea class="form-control" id="commentArea" name="commentArea"
                                                       rows="3"></textarea>
                                 </div>
+                                {% if buttom %}
+                                    <div class="col-xl-12 text-right" style="color: #aa0000">
+                                        <br>
+                                        Reporte levantado el {{ details }}
+                                    </div>
+                                {% endif %}
                                 <div class="col-md-12">
                                     <br>
                                 </div>
                                 {% if buttom %}
-                                    <a class="btn btn-lg btn-warning mr-sm-2" onclick="javascript:buttonForm()">
+                                    <a class="btn btn-lg btn-warning mr-sm-2" onclick="javascript:buttonEnd()"
+                                       style="color: #ffffff">
                                         Terminar
                                     </a>
-                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonForm()">
+                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonUpdate()"
+                                       style="color: #ffffff">
                                         Actualizar
                                     </a>
                                 {% else %}
-                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonForm()">
+                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonSave()"
+                                       style="color: #ffffff">
                                         Guardar
                                     </a>
                                 {% endif %}
@@ -160,36 +186,29 @@
                         </div>
                     </div>
                 </form>
-                {% if history %}
-                    <div class="col-xl-12 text-right" style="color: #aa0000">
-                        <br>
-                        Reporte levantado el {{ details }}
-                    </div>
-                {% endif %}
             </div>
             {% if history %}
+                <div class="col-xl-12">
+                    <hr>
                 </div>
-                <div class="tab-pane fade" id="historical" role="tabpanel" aria-labelledby="profile-tab">
-                    <div class="col-xl-12">
-                        <table class="table cell-border" id="datatable" cellspacing="0"
-                               width="100%">
-                            <thead>
-                            <tr align="center">
-                                <th><strong>TIPO REPORTE</strong></th>
-                                <th><strong>SUB REPORTE</strong></th>
-                                <th><strong>ACCION</strong></th>
-                                <th><strong>ESTADO</strong></th>
-                                <th><strong>COMENTARIO</strong></th>
-                                <th><strong>USUARIO</strong></th>
-                                <th><strong>FECHA</strong></th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                <div class="col-xl-12">
+                    <table class="table cell-border" id="datatable" cellspacing="0"
+                           width="100%">
+                        <thead>
+                        <tr align="center">
+                            <th><strong>TIPO REPORTE</strong></th>
+                            <th><strong>SUB REPORTE</strong></th>
+                            <th><strong>ACCION</strong></th>
+                            <th><strong>ESTADO</strong></th>
+                            <th><strong>COMENTARIO</strong></th>
+                            <th><strong>USUARIO</strong></th>
+                            <th><strong>FECHA</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                        </tbody>
+                    </table>
                 </div>
             {% endif %}
         </div>
@@ -235,12 +254,11 @@
 
         /**
          * Created by Jose Daniel Hernandez Osorio - isc.danielosorio@hotmail.com -
-         * Ingeniero en Sistemas Copmutacionales.
+         * Ingeniero en Sistemas Computacionales.
          */
 
         $(document).ready(
             function () {
-
                 $("#list_type_report").change(function () {
                     list_sub_report();
                     list_action_report();
@@ -251,6 +269,7 @@
 
                 $("#list_action_report").change(function () {
                 });
+                console.log(getState());
                 {% if history %}
                     var data = search();
                     update(data);
@@ -389,14 +408,52 @@
             var date = $('select[id=list_action_report]').val();
             return date;
         }
-        {% if buttom %}
 
+        function getComment() {
+            var date = document.getElementById("commentArea").value;
+            return date;
+        }
+
+        function getState() {
+            var name = document.getElementsByName("option");
+            for (var i = 0; i < name.length; i++) {
+                if (name[i].checked)
+                    return name[i].value;
+            }
+        }
+        {% if buttom %}
+            function buttonEnd() {
+                window.location.href = "{%  url 'end_report' %}" + getActionReport() + "/" + getState() + "/" + getComment() + "/";
+            }
+
+            function buttonUpdate() {
+            }
         {% else %}
-            function buttonForm() {
+            function buttonSave() {
                 if (getTypeReport() == 0 || getSubReport() == 0) {
                     alert("Para Crear un Reporte es necesario como minimo ingresar \"Tipo de Reporte\" y \"Sub Reporte\"");
                 } else {
-                    $("#modalmessage").modal('show');
+                    if (getActionReport() != 0) {
+                        if (getActionReport() == 9) {
+                            if (getComment() != "") {
+                                $("#modalmessage").modal('show');
+                            } else {
+                                alert("Acabas de selecionar una accion como \"Otro\", necesitas realizar una breve descripcion en el campo de los \"Comentarios\"");
+                            }
+                        } else {
+                            $("#modalmessage").modal('show');
+                        }
+                    } else {
+                        if (getSubReport() == 9) {
+                            if (getComment() != "") {
+                                $("#modalmessage").modal('show');
+                            } else {
+                                alert("Acabas de selecionar un sub reporte como \"Otro\", necesitas realizar una breve descripcion en el campo de los \"Comentarios\"");
+                            }
+                        } else {
+                            $("#modalmessage").modal('show');
+                        }
+                    }
                 }
             }
         {% endif %}

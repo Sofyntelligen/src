@@ -290,6 +290,7 @@ def queryCheckReports(id: int):
           'B.ID AS ID_REPORTE, ' \
           'B.FECHA AS FECHA, ' \
           'B.ID_TESTIGO AS ID_TESTIGO, ' \
+          'C.ID AS ID_ESTADO, ' \
           'C.ESTADO AS ESTADO, ' \
           'D.ID AS ID, ' \
           'E.ID AS ID_TIPO_REPORTE, ' \
@@ -299,8 +300,8 @@ def queryCheckReports(id: int):
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
           'WHERE ' \
-          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id};'.format(
-        id=id)
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id} ' \
+          'ORDER BY FECHA;'.format(id=id)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
@@ -308,9 +309,7 @@ def queryCheckReports(id: int):
 
 
 def queryInsertAction(id_user: int, report: int, action: int):
-    id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
-
-    sql = 'INSERT INTO ACCIONES_REPORTES(ID, ID_USUARIO, REPORTE, ACCION) VALUES ({id}, {id_user}, {report}, {action});'.format(
+    sql = 'INSERT INTO ACCIONES_REPORTES(ID_USUARIO, REPORTE, ACCION) VALUES ({id_user}, {report}, {action});'.format(
         id=id, id_user=id_user, report=report, action=action)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
@@ -319,9 +318,7 @@ def queryInsertAction(id_user: int, report: int, action: int):
 
 
 def queryInsertComment(id_user: int, report: int, comment: str):
-    id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
-
-    sql = 'INSERT INTO COMENTARIOS_REPORTES(ID, ID_USUARIO, REPORTE, COMENTARIO) VALUES ({id}, {id_user}, {report}, \'{comment}\');'.format(
+    sql = 'INSERT INTO COMENTARIOS_REPORTES(ID_USUARIO, REPORTE, COMENTARIO) VALUES ({id_user}, {report}, \'{comment}\');'.format(
         id=id, id_user=id_user, report=report, comment=comment)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
@@ -332,7 +329,7 @@ def queryInsertComment(id_user: int, report: int, comment: str):
 def queryInsertReport(witness: int, id_user: int, report: int, state: int):
     id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
 
-    sql = 'INSERT INTO REPORTES_TESTIGOS(ID, ID_TESTIGO, ID_USUARIO, REPORTE, ESTADO) VALUES ({id}, {witness}, {id_user}, {report}, 1);'.format(
+    sql = 'INSERT INTO REPORTES_TESTIGOS(ID, ID_TESTIGO, ID_USUARIO, REPORTE, ESTADO) VALUES ({id}, {witness}, {id_user}, {report}, {state});'.format(
         id=id, witness=witness, id_user=id_user, report=report, state=state)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
@@ -373,3 +370,18 @@ def queryHistory(id_report: int):
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
     return sql
+
+
+def queryUpdateReport(state: int, id_report: int):
+    sql = 'UPDATE REPORTES_TESTIGOS SET ESTADO = {state} WHERE ID = {id_report};'.format(state=state, id_report=id_report)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+
+
+
+
+

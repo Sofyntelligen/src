@@ -319,12 +319,13 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
                 "searchHighlight": true,
-                "scrollX": true,
+                "scrollY": 730,
                 "select": true,
                 "bLengthChange": false,
                 "processing": true,
                 "data": datas,
                 "pageLength": 20,
+                "paging": false,
                 "createdRow": function (row, data, dataIndex) {
                     number = number + 1;
                     if ((data["TOTAL"] - data["REVISADOS"]) > 10)
