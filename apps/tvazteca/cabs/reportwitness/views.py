@@ -8,7 +8,7 @@ from django.shortcuts import render
 from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
 from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, queryDataWitness, queryActionReport, \
     queryCheckReports, queryReportID, queryInsertReport, queryInsertComment, queryInsertAction, queryHistory, \
-    queryUpdateReport
+    queryUpdateReport, queryNumber
 from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue
 from apps.tvazteca.cabs.objects.history import History
@@ -21,9 +21,7 @@ def startReportWitness(request, id=None):
     logging.getLogger('info_logger').info('--- startReportWitness ---')
 
     if not checkValue(request):
-        date = {"error": "error"}
-        json_data = json.dumps(date)
-        return HttpResponse(json_data, content_type='application/json')
+        return render(request, 'login/start_login.html')
 
     request.session['witness'] = id
 
@@ -54,9 +52,10 @@ def startReportWitness(request, id=None):
                         id_state = 2
                     if id_state == 6:
                         id_state = 3
-                    request.session['id_report'] = id_state
+                    request.session['id_state'] = id_state
                 else:
-                    id_state = None
+                    id_state = -1
+                    request.session['id_state'] = -1
 
                 query = querySubReport(id_type_report)
                 # datas = select(query, 'tvazteca_vidnotd')
@@ -68,23 +67,28 @@ def startReportWitness(request, id=None):
 
                 report = []
                 comments = {}
-                action = ''
+                comment = ''
                 report.append(reports[latest])
                 history = evaluation_history(report)
 
+                request.session['id_action'] = -1
+                id_action = 0
+
                 for i in range(len(history)):
-                    if history[i]['COMENTARIO'] != 'N/A':
-                        comments[history[i]['FECHA']] = history[i]['COMENTARIO']
+                    if history[i]['COMENTARIO'] != 'N/A' and history[i]['COMENTARIO'] != comment:
+                        comment = comments[history[i]['FECHA']] = history[i]['COMENTARIO']
                     if history[i]['ACCION'] != history[i]['ESTADO']:
-                        action = history[i]['ACCION']
+                        for x in action_report:
+                            if x['ACCION'] == history[i]['ACCION']:
+                                 id_action = request.session['id_action'] = x['ID']
 
                 details = reports[latest]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
                 details += ' por ' + reports[latest]['NOMBRE']
                 return render(request, 'report/witness.html',
                               {'type_report': type_report, 'witness': witness, 'history': True, 'buttom': True,
                                'details': details, 'id_type_report': id_type_report, 'sub_report': sub_report,
-                               'id_sub_report': id_sub_report, 'action_report': action_report,
-                               'action': action, 'comments': comments, 'id_state': id_state})
+                               'id_sub_report': id_sub_report, 'action_report': action_report, 'id_action': id_action,
+                               'comments': comments, 'id_state': id_state,})
             else:
                 return render(request, 'report/witness.html',
                               {'type_report': type_report, 'witness': witness, 'history': True})
@@ -141,6 +145,12 @@ def listActionReportJSON(request):
 
 def listHistory(request):
     logging.getLogger('info_logger').info('--- listHistory ---')
+
+    if not checkValue(request):
+        date = {"error": "error"}
+        json_data = json.dumps(date)
+        return HttpResponse(json_data, content_type='application/json')
+
     id_witness = request.GET.get('id_witness')
 
     query = queryCheckReports(id_witness)
@@ -190,11 +200,6 @@ def insertReportWitness(request):
         id_report = query['1']
         queryDLL(query['0'], 'tvazteca_bloq')
 
-        if rn != 1:
-            query = queryInsertAction(id_user, id_report, red)
-            # dates = select(query, 'tvazteca_vidnotd')
-            queryDLL(query, 'tvazteca_bloq')
-
         action = request.POST['list_action_report']
         if '0' != action:
             query = queryInsertAction(id_user, id_report, action)
@@ -207,6 +212,39 @@ def insertReportWitness(request):
             # dates = select(query, 'tvazteca_vidnotd')
             queryDLL(query, 'tvazteca_bloq')
 
+        if rn != 1:
+            query = queryInsertAction(id_user, id_report, red)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+    return HttpResponseRedirect('/inventario_testigos/inicio/')
+
+
+def updateReport(request, id_action=None, id_state=None, comment=None):
+    logging.getLogger('info_logger').info('--- insertReportWitness ---')
+    print(comment)
+    id_user = request.session['id']
+    id_report = request.session['id_report']
+
+    if int(id_action) != int(request.session['id_action']):
+        query = queryInsertAction(id_user, id_report, id_action)
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
+    if comment != 'null':
+        query = queryInsertComment(id_user, id_report, comment.upper())
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
+    if int(id_state) != int(request.session['id_state']):
+        query = queryUpdateReport(int(id_state) + 3, id_report)
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
+        query = queryInsertAction(id_user, id_report, int(id_state) + 2)
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
     return HttpResponseRedirect('/inventario_testigos/inicio/')
 
 
@@ -216,10 +254,28 @@ def endReport(request, id_action=None, id_state=None, comment=None):
     id_user = request.session['id']
     id_report = request.session['id_report']
 
-    print(id_action)
-    print(id_state)
-    print(comment)
+    query = queryUpdateReport(2, id_report)
+    # dates = select(query, 'tvazteca_vidnotd')
+    queryDLL(query, 'tvazteca_bloq')
 
+    if int(id_action) != int(request.session['id_action']):
+        query = queryInsertAction(id_user, id_report, id_action)
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
+    if comment != 'null':
+        query = queryInsertComment(id_user, id_report, comment.upper())
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
+    if int(id_state) != int(request.session['id_state']):
+        query = queryInsertAction(id_user, id_report, int(id_state) + 2)
+        # dates = select(query, 'tvazteca_vidnotd')
+        queryDLL(query, 'tvazteca_bloq')
+
+    query = queryInsertAction(id_user, id_report, 1)
+    # dates = select(query, 'tvazteca_vidnotd')
+    queryDLL(query, 'tvazteca_bloq')
 
     return HttpResponseRedirect('/inventario_testigos/inicio/')
 

@@ -3,6 +3,7 @@ import logging.config
 import time
 
 from apps.tvazteca.cabs.coding.util import *
+from apps.tvazteca.cabs.coding.databases.connection import select
 
 
 def queryTableViewFinder(type_network: str, type_error: str, level_alert: str, date_monitoring: str):
@@ -309,8 +310,8 @@ def queryCheckReports(id: int):
 
 
 def queryInsertAction(id_user: int, report: int, action: int):
-    sql = 'INSERT INTO ACCIONES_REPORTES(ID_USUARIO, REPORTE, ACCION) VALUES ({id_user}, {report}, {action});'.format(
-        id=id, id_user=id_user, report=report, action=action)
+    sql = 'INSERT INTO ACCIONES_REPORTES(ID, ID_USUARIO, REPORTE, ACCION) VALUES ({id}, {id_user}, {report}, {action});'.format(
+        id=(queryNumber() + 1), id_user=id_user, report=report, action=action)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
@@ -318,8 +319,8 @@ def queryInsertAction(id_user: int, report: int, action: int):
 
 
 def queryInsertComment(id_user: int, report: int, comment: str):
-    sql = 'INSERT INTO COMENTARIOS_REPORTES(ID_USUARIO, REPORTE, COMENTARIO) VALUES ({id_user}, {report}, \'{comment}\');'.format(
-        id=id, id_user=id_user, report=report, comment=comment)
+    sql = 'INSERT INTO COMENTARIOS_REPORTES(ID, ID_USUARIO, REPORTE, COMENTARIO) VALUES ({id}, {id_user}, {report}, \'{comment}\');'.format(
+        id=(queryNumber() + 1), id_user=id_user, report=report, comment=comment)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
@@ -353,19 +354,19 @@ def queryReportID(id_type_report: int, id_sub_report: int):
 
 def queryHistory(id_report: int):
     sql = 'SELECT ' \
-          'A.NOMBRE, B.ID, C.FECHA AS FECHA, C.COMENTARIO AS TAREA, \'COMENTARIO\' AS TIPO ' \
+          'C.ID AS NUMERO, A.NOMBRE, B.ID, C.FECHA AS FECHA, C.COMENTARIO AS TAREA, \'COMENTARIO\' AS TIPO ' \
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, COMENTARIOS_REPORTES C ' \
           'WHERE ' \
           'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND B.ID = {id_report} ' \
           'UNION ALL( ' \
           'SELECT ' \
-          'A.NOMBRE, B.ID, C.FECHA AS FECHA, D.ACCION  AS TAREA, \'ACCION\' AS TIPO ' \
+          'C.ID AS NUMERO, A.NOMBRE, B.ID, C.FECHA AS FECHA, D.ACCION  AS TAREA, \'ACCION\' AS TIPO ' \
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, ACCIONES_REPORTES C, CAT_ACCIONES D ' \
           'WHERE ' \
           'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND C.ACCION = D.ID AND B.ID = {id_report}) ' \
-          'ORDER BY FECHA;'.format(id_report=id_report)
+          'ORDER BY NUMERO;'.format(id_report=id_report)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
@@ -373,15 +374,40 @@ def queryHistory(id_report: int):
 
 
 def queryUpdateReport(state: int, id_report: int):
-    sql = 'UPDATE REPORTES_TESTIGOS SET ESTADO = {state} WHERE ID = {id_report};'.format(state=state, id_report=id_report)
+    sql = 'UPDATE REPORTES_TESTIGOS SET ESTADO = {state} WHERE ID = {id_report};'.format(state=state,
+                                                                                         id_report=id_report)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
     return sql
 
 
+def queryNumber():
+    sql = 'SELECT ' \
+          'MAX(ID) AS NUMERO ' \
+          'FROM ' \
+          'COMENTARIOS_REPORTES ' \
+          'UNION ALL(' \
+          'SELECT ' \
+          'MAX(ID) AS NUMERO ' \
+          'FROM ' \
+          'ACCIONES_REPORTES);'
 
+    data = select(sql, 'tvazteca_bloq')
 
+    one = ''
+    two = ''
 
+    if data[0]['NUMERO'] is not None:
+        one = data[0]['NUMERO']
+    else:
+        one = 0
+    if data[1]['NUMERO'] is not None:
+        two = data[1]['NUMERO']
+    else:
+        two = 0
 
-
+    if one > two:
+        return int(one)
+    else:
+        return int(two)

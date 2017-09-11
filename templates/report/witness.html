@@ -7,8 +7,6 @@
     <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
     {% if history %}
         <link href="{% static 'dist/css/jquery.dataTables.css' %}" rel="stylesheet" media="screen">
-        <link href="{% static 'dist/css/select.dataTables.css' %}" rel="stylesheet" media="screen">
-        <link href="{% static 'dist/css/dataTables.searchHighlight.css' %}" rel="stylesheet" media="screen">
     {% endif %}
 {% endblock %}
 {% block headerbutton %}
@@ -82,11 +80,11 @@
                                             class="combobox input-large form-control form-control-sm"
                                             name="list_action_report">
                                         {% if buttom %}
-                                            {% if action %}
+                                            {% if id_action %}
                                                 <option value="0">-- Seleccionar --</option>
                                                 {% for actions in action_report %}
                                                     <option value="{{ actions.ID }}"
-                                                            {% if action == actions.ACCION %}selected="selected" {% endif %}>{{ actions.ACCION }}</option>
+                                                            {% if id_action == actions.ID %}selected="selected" {% endif %}>{{ actions.ACCION }}</option>
                                                 {% endfor %}
                                             {% else %}
                                                 <option value="0" selected="selected">-- Seleccionar --</option>
@@ -153,7 +151,8 @@
                                 {% endif %}
                                 <div class="col-md-12">
                                             <textarea class="form-control" id="commentArea" name="commentArea"
-                                                      rows="3"></textarea>
+                                                      rows="3" style="text-transform:uppercase;"
+                                                      onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                                 </div>
                                 {% if buttom %}
                                     <div class="col-xl-12 text-right" style="color: #aa0000">
@@ -165,13 +164,13 @@
                                     <br>
                                 </div>
                                 {% if buttom %}
-                                    <a class="btn btn-lg btn-warning mr-sm-2" onclick="javascript:buttonEnd()"
+                                    <a class="btn btn-lg btn-warning mr-sm-2" id="1" onclick="javascript:buttonEnd()"
                                        style="color: #ffffff">
                                         Terminar
                                     </a>
-                                    <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonUpdate()"
+                                    <a class="btn btn-lg btn-primary mr-sm-2" id="0" onclick="javascript:buttonUpdate()"
                                        style="color: #ffffff">
-                                        Actualizar
+                                        Modificar
                                     </a>
                                 {% else %}
                                     <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonSave()"
@@ -224,11 +223,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Esta seguro de realizar un reporte, para el testigo con nombre
-                        {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.</p>
+                    {% if buttom %}
+                        <p id="message"></p>
+                    {% else %}
+                        <p>Esta seguro de realizar un reporte, para el testigo con nombre
+                            {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.</p>
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="javascript:buttonConfirmation()">Aceptar
+                    <button type="button" class="btn btn-primary" onclick="javascript:buttonConfirmation()">
+                        Aceptar
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
@@ -242,10 +246,6 @@
 {% block additionalfooterexternalafter %}
     {% if history %}
         <script type="text/javascript" src="{% static 'dist/js/jquery.dataTables.js' %}" charset="UTF-8"></script>
-        <script type="text/javascript" src="{% static 'dist/js/dataTables.select.js' %}" charset="UTF-8"></script>
-        <script type="text/javascript" src="{% static 'dist/js/dataTables.searchHighlight.min.js' %}"
-                charset="UTF-8"></script>
-        <script type="text/javascript" src="{% static 'dist/js/jquery.highlight.js' %}" charset="UTF-8"></script>
     {% endif %}
     <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
 {% endblock %}
@@ -257,6 +257,8 @@
          * Ingeniero en Sistemas Computacionales.
          */
 
+        var link = "";
+
         $(document).ready(
             function () {
                 $("#list_type_report").change(function () {
@@ -264,12 +266,9 @@
                     list_action_report();
                 });
 
-                $("#list_sub_report").change(function () {
+                $('input[type=radio]').change('click', function () {
+                    console.log(this);
                 });
-
-                $("#list_action_report").change(function () {
-                });
-                console.log(getState());
                 {% if history %}
                     var data = search();
                     update(data);
@@ -340,22 +339,14 @@
 
                 $('#datatable').DataTable({
                     "language": {
-                        select: {
-                            rows: {
-                                _: "%d filas seleccionadas",
-                                0: "Haga click en la fila para seleccionar",
-                                1: "1 fila seleccionada"
-                            }
-                        },
                         "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                     },
-                    "searchHighlight": true,
                     "scrollX": true,
-                    "select": true,
-                    "bLengthChange": false,
+                    "scrollY": 380,
                     "processing": true,
+                    "bFilter": false,
+                    "paging": false,
                     "data": datas,
-                    "pageLength": 20,
                     "sDom": '<"row"<"col-sm-9 text-center"p>>rti',
                     "columns": [
                         {"data": "TIPO_REPORTE"},
@@ -388,9 +379,7 @@
                         className: "text-center",
                         "targets": [6]
                     }],
-                    "select": {
-                        style: "single"
-                    },
+                    "order": [[6, "asc"]]
                 });
             }
         {% endif %}
@@ -411,7 +400,11 @@
 
         function getComment() {
             var date = document.getElementById("commentArea").value;
-            return date;
+            if (date == "") {
+                return "null";
+            } else {
+                return date;
+            }
         }
 
         function getState() {
@@ -420,13 +413,35 @@
                 if (name[i].checked)
                     return name[i].value;
             }
+            return -1;
         }
         {% if buttom %}
             function buttonEnd() {
-                window.location.href = "{%  url 'end_report' %}" + getActionReport() + "/" + getState() + "/" + getComment() + "/";
+                if (getActionReport() != 0 || getState() != -1) {
+                    if (getComment() != "null") {
+                        link = "{%  url 'end_report' %}" + getActionReport() + "/" + getState() + "/" + getComment();
+                        $('#message').text("Esta seguro de Terminal el Reporte, del Testigo {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.");
+                        $("#modalmessage").modal('show');
+                    } else {
+                        alert("No puedes Terminar un Reporte sin que, hayas colocado un comentario sobre su solucion.");
+                    }
+                } else {
+                    alert("No puedes Terminar un Reporte sin que hayas, realizado una accion para ello.");
+                }
             }
 
             function buttonUpdate() {
+                if (getComment() != "null" || getActionReport() != {{ id_action }} || getState() != {{ id_state }}) {
+                    link = "{%  url 'update_report' %}" + getActionReport() + "/" + getState() + "/" + getComment();
+                    $('#message').text("Esta seguro de Modificar el Reporte, del Testigo {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.");
+                    $("#modalmessage").modal('show');
+                } else {
+                    alert("Para poder hacer una Modificacion, es necesario cambiar o colocar un nuevo dato.");
+                }
+            }
+
+            function buttonConfirmation() {
+                window.location.href = link;
             }
         {% else %}
             function buttonSave() {
@@ -435,7 +450,7 @@
                 } else {
                     if (getActionReport() != 0) {
                         if (getActionReport() == 9) {
-                            if (getComment() != "") {
+                            if (getComment() != "null") {
                                 $("#modalmessage").modal('show');
                             } else {
                                 alert("Acabas de selecionar una accion como \"Otro\", necesitas realizar una breve descripcion en el campo de los \"Comentarios\"");
@@ -448,7 +463,7 @@
                             if (getComment() != "") {
                                 $("#modalmessage").modal('show');
                             } else {
-                                alert("Acabas de selecionar un sub reporte como \"Otro\", necesitas realizar una breve descripcion en el campo de los \"Comentarios\"");
+                                alert("Acabas de selecionar un sub Reporte como \"Otro\", necesitas realizar una breve descripcion en el campo de los \"Comentarios\"");
                             }
                         } else {
                             $("#modalmessage").modal('show');
@@ -456,10 +471,10 @@
                     }
                 }
             }
-        {% endif %}
-        function buttonConfirmation() {
-            document.forms['form_report'].submit();
-        }
 
+            function buttonConfirmation() {
+                document.forms['form_report'].submit();
+            }
+        {% endif %}
     </script>
 {% endblock %}
