@@ -5,6 +5,7 @@
 {% block title %}Reporte Testigo{% endblock %}
 {% block additionalheadexternalafter %}
     <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="{% static '/jquery/jquery-3.2.1.js' %}" charset="UTF-8"></script>
     {% if history %}
         <link href="{% static 'dist/css/jquery.dataTables.css' %}" rel="stylesheet" media="screen">
     {% endif %}
@@ -103,9 +104,9 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option"
                                                    id="radios1"
-                                                   value="0" {% if id_state == 0 %}checked {% endif %}>
+                                                   value="0" {% if id_state == 0 %} checked {% endif %}>
                                             Reporte a RN
                                         </label>
                                     </div>
@@ -113,9 +114,9 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option"
                                                    id="radios2"
-                                                   value="1" {% if id_state == 1 %}checked {% endif %}>
+                                                   value="1" {% if id_state == 1 %} checked {% endif %}>
                                             Tarjeta WIN-TV entregada a RN
                                         </label>
                                     </div>
@@ -123,9 +124,9 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option"
                                                    id="radios3"
-                                                   value="2" {% if id_state == 2 %}checked {% endif %}>
+                                                   value="2" {% if id_state == 2 %} checked {% endif %}>
                                             Disco duro entregadio a RN
                                         </label>
                                     </div>
@@ -133,9 +134,9 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option"
                                                    id="radios4"
-                                                   value="3" {% if id_state == 3 %}checked {% endif %}>
+                                                   value="3" {% if id_state == 3 %} checked {% endif %}>
                                             CPU entregada a RN
                                         </label>
                                     </div>
@@ -245,7 +246,7 @@
 {% endblock %}
 {% block additionalfooterexternalafter %}
     {% if history %}
-        <script type="text/javascript" src="{% static 'dist/js/jquery.dataTables.js' %}" charset="UTF-8"></script>
+        <script type="text/javascript" src="{% static '/dist/js/jquery.dataTables.js' %}" charset="UTF-8"></script>
     {% endif %}
     <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
 {% endblock %}
@@ -266,8 +267,29 @@
                     list_action_report();
                 });
 
-                $('input[type=radio]').change('click', function () {
-                    console.log(this);
+                $('input[type=checkbox]').change('click', function () {
+                    switch (this.id) {
+                        case "radios1":
+                            $("#radios2").prop("checked", false);
+                            $("#radios3").prop("checked", false);
+                            $("#radios4").prop("checked", false);
+                            break;
+                        case "radios2":
+                            $("#radios1").prop("checked", false);
+                            $("#radios3").prop("checked", false);
+                            $("#radios4").prop("checked", false);
+                            break;
+                        case "radios3":
+                            $("#radios2").prop("checked", false);
+                            $("#radios1").prop("checked", false);
+                            $("#radios4").prop("checked", false);
+                            break;
+                        case "radios4":
+                            $("#radios2").prop("checked", false);
+                            $("#radios3").prop("checked", false);
+                            $("#radios1").prop("checked", false);
+                            break;
+                    }
                 });
                 {% if history %}
                     var data = search();

@@ -149,8 +149,11 @@ def getUrlMedia(request, id=None, date=None, event=None, url=None, name=None):
     url_media = '/media/testigos' + name + '/' + url + '/' + completeNumber(date_format[0]) + '_' + completeNumber(
         date_format[1]) + '_' + date_format[2] + '/' + id_format + completeNumber(date_format[0]) + completeNumber(
         date_format[1]) + date_format[2][2] + date_format[2][3] + event.rjust(8, '0') + '.mp4'
-
-    file = FileWrapper(open(url_media, 'rb'))
+    try:
+        file = FileWrapper(open(url_media, 'rb'))
+    except:
+        return render(request, 'error/error.html', {'number': '404', 'message': 'No Encontrado',
+                                                    'error': 'El video a descargar no se encuentra disponible o no existe.'})
     response = HttpResponse(file, content_type='video/mp4')
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(
         id_format + completeNumber(date_format[0]) + completeNumber(date_format[1]) + date_format[2][2] +
