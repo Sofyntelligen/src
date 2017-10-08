@@ -8,7 +8,7 @@ from django.shortcuts import render
 from apps.tvazteca.cabs.coding.databases.connection import select, queryDLL
 from apps.tvazteca.cabs.coding.query import queryTypeReport, querySubReport, queryDataWitness, queryActionReport, \
     queryCheckReports, queryReportID, queryInsertReport, queryInsertComment, queryInsertAction, queryHistory, \
-    queryUpdateReport, queryNumber
+    queryUpdateReport, queryCheckReportsDesc, queryCheckReport
 from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue
 from apps.tvazteca.cabs.objects.history import History
@@ -19,9 +19,6 @@ from apps.tvazteca.cabs.objects.history import History
 
 def startReportWitness(request, id=None):
     logging.getLogger('info_logger').info('--- startReportWitness ---')
-
-    if not checkValue(request):
-        return render(request, 'login/start_login.html')
 
     request.session['witness'] = id
 
@@ -69,7 +66,7 @@ def startReportWitness(request, id=None):
                 comments = {}
                 comment = ''
                 report.append(reports[latest])
-                history = evaluation_history(report)
+                history = evaluation_history(report).getHistory()
 
                 request.session['id_action'] = -1
                 id_action = 0
@@ -80,7 +77,7 @@ def startReportWitness(request, id=None):
                     if history[i]['ACCION'] != history[i]['ESTADO']:
                         for x in action_report:
                             if x['ACCION'] == history[i]['ACCION']:
-                                 id_action = request.session['id_action'] = x['ID']
+                                id_action = request.session['id_action'] = x['ID']
 
                 details = reports[latest]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
                 details += ' por ' + reports[latest]['NOMBRE']
@@ -88,7 +85,7 @@ def startReportWitness(request, id=None):
                               {'type_report': type_report, 'witness': witness, 'history': True, 'buttom': True,
                                'details': details, 'id_type_report': id_type_report, 'sub_report': sub_report,
                                'id_sub_report': id_sub_report, 'action_report': action_report, 'id_action': id_action,
-                               'comments': comments, 'id_state': id_state,})
+                               'comments': comments, 'id_state': id_state, })
             else:
                 return render(request, 'report/witness.html',
                               {'type_report': type_report, 'witness': witness, 'history': True})
@@ -143,8 +140,8 @@ def listActionReportJSON(request):
     return HttpResponse(json_data, content_type='application/json')
 
 
-def listHistory(request):
-    logging.getLogger('info_logger').info('--- listHistory ---')
+def listReport(request):
+    logging.getLogger('info_logger').info('--- listReport ---')
 
     if not checkValue(request):
         date = {"error": "error"}
@@ -153,13 +150,35 @@ def listHistory(request):
 
     id_witness = request.GET.get('id_witness')
 
-    query = queryCheckReports(id_witness)
+    query = queryCheckReportsDesc(id_witness)
     # datas = select(query, 'tvazteca_vidnotd')
     datas_report = select(query, 'tvazteca_bloq')
 
     history = evaluation_history(datas_report)
 
-    json_data = json.dumps(history)
+    json_data = json.dumps(history.getRegistry())
+
+    return HttpResponse(json_data, content_type='application/json')
+
+
+def listHistory(request):
+    logging.getLogger('info_logger').info('--- listHistory ---')
+
+    if not checkValue(request):
+        date = {"error": "error"}
+        json_data = json.dumps(date)
+        return HttpResponse(json_data, content_type='application/json')
+
+    id_report = request.GET.get('id_report')
+    id_witness = request.session['witness']
+
+    query = queryCheckReport(id_witness, id_report)
+    # datas = select(query, 'tvazteca_vidnotd')
+    datas_report = select(query, 'tvazteca_bloq')
+
+    history = evaluation_history(datas_report)
+
+    json_data = json.dumps(history.getHistory())
 
     return HttpResponse(json_data, content_type='application/json')
 
@@ -222,11 +241,11 @@ def insertReportWitness(request):
 
 def updateReport(request, id_action=None, id_state=None, comment=None):
     logging.getLogger('info_logger').info('--- insertReportWitness ---')
-    print(comment)
+
     id_user = request.session['id']
     id_report = request.session['id_report']
 
-    if int(id_action) != int(request.session['id_action']):
+    if int(id_action) != int(request.session['id_action']) and int(id_action) != 0:
         query = queryInsertAction(id_user, id_report, id_action)
         # dates = select(query, 'tvazteca_vidnotd')
         queryDLL(query, 'tvazteca_bloq')
@@ -258,7 +277,7 @@ def endReport(request, id_action=None, id_state=None, comment=None):
     # dates = select(query, 'tvazteca_vidnotd')
     queryDLL(query, 'tvazteca_bloq')
 
-    if int(id_action) != int(request.session['id_action']):
+    if int(id_action) != int(request.session['id_action']) and int(id_action) != 0:
         query = queryInsertAction(id_user, id_report, id_action)
         # dates = select(query, 'tvazteca_vidnotd')
         queryDLL(query, 'tvazteca_bloq')
@@ -280,13 +299,30 @@ def endReport(request, id_action=None, id_state=None, comment=None):
     return HttpResponseRedirect('/inventario_testigos/inicio/')
 
 
+def startHistoryReport(request, id_report=None):
+    logging.getLogger('info_logger').info('--- startHistoryReport ---')
+
+    id = request.session['witness']
+
+    if checkValue(request):
+        query = queryDataWitness(id)
+        # witness = select(query, 'tvazteca_vidnotd')
+        witness = select(query, 'tvazteca_bloq')
+        witness[0]['TIPO_MUX'] = optionMux(witness[0]['TIPO_MUX'])
+        return render(request, 'report/history.html',
+                      {'witness': witness, 'id_report': id_report})
+    else:
+        return render(request, 'login/start_login.html', {
+            'message_warning': 'Para poder crear un reporte de un testigo se necesita iniciar sesión'})
+
+
 def evaluation_history(datas_report):
     logging.getLogger('info_logger').info('--- evaluation_history ---')
     history = History()
-
     for i in range(len(datas_report)):
         id_report = datas_report[i]['ID_REPORTE']
 
+        history.setId(id_report)
         history.setTypeReport(datas_report[i]['TIPO_REPORTE'])
         history.setSubReport(datas_report[i]['SUB_REPORTE'])
         history.state = datas_report[i]['ESTADO']
@@ -304,9 +340,10 @@ def evaluation_history(datas_report):
             history.addHistory()
         else:
             history.addHistory()
-
+            history.addRegistry()
+        if (len(history.getRegistry()) - 1) != i or len(history.getRegistry()) == 0:
+            history.validationRegistry()
         history.comment = ''
         history.action = ''
 
-    print(data_history)
-    return history.getHistory()
+    return history

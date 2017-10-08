@@ -2,8 +2,8 @@ import logging
 import logging.config
 import time
 
-from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.coding.databases.connection import select
+from apps.tvazteca.cabs.coding.util import *
 
 
 def queryTableViewFinder(type_network: str, type_error: str, level_alert: str, date_monitoring: str):
@@ -205,7 +205,13 @@ def queyTableListWitness(channel: int):
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
           'WHERE ' \
-          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = TESTIGOS.ID_TESTIGO AND B.ESTADO != 2) AS ID_REPORTE ' \
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = TESTIGOS.ID_TESTIGO AND B.ESTADO != 2) AS ID_REPORTE, ' \
+          '(SELECT ' \
+          'B.ESTADO ' \
+          'FROM ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
+          'WHERE ' \
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = TESTIGOS.ID_TESTIGO AND B.ESTADO != 2) AS ID_ESTADO ' \
           'FROM ' \
           'LISTA_TESTIGOS TESTIGOS ' \
           'WHERE '
@@ -309,6 +315,56 @@ def queryCheckReports(id: int):
     return sql
 
 
+def queryCheckReportsDesc(id: int):
+    sql = 'SELECT ' \
+          'A.NUMERO_EMPLEADO AS EMPLEADO, ' \
+          'A.NOMBRE AS NOMBRE, ' \
+          'B.ID AS ID_REPORTE, ' \
+          'B.FECHA AS FECHA, ' \
+          'B.ID_TESTIGO AS ID_TESTIGO, ' \
+          'C.ID AS ID_ESTADO, ' \
+          'C.ESTADO AS ESTADO, ' \
+          'D.ID AS ID, ' \
+          'E.ID AS ID_TIPO_REPORTE, ' \
+          'E.TIPO_REPORTE, ' \
+          'F.ID AS ID_SUB_REPORTE, ' \
+          'F.SUB_REPORTE ' \
+          'FROM ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
+          'WHERE ' \
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id} ' \
+          'ORDER BY FECHA DESC;'.format(id=id)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
+def queryCheckReport(id_witness: int, id_report: int):
+    sql = 'SELECT ' \
+          'A.NUMERO_EMPLEADO AS EMPLEADO, ' \
+          'A.NOMBRE AS NOMBRE, ' \
+          'B.ID AS ID_REPORTE, ' \
+          'B.FECHA AS FECHA, ' \
+          'B.ID_TESTIGO AS ID_TESTIGO, ' \
+          'C.ID AS ID_ESTADO, ' \
+          'C.ESTADO AS ESTADO, ' \
+          'D.ID AS ID, ' \
+          'E.ID AS ID_TIPO_REPORTE, ' \
+          'E.TIPO_REPORTE, ' \
+          'F.ID AS ID_SUB_REPORTE, ' \
+          'F.SUB_REPORTE ' \
+          'FROM ' \
+          'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, CAT_ESTADOS C, CAT_REPORTES D, CAT_TIPO_REPORTE E, CAT_SUB_REPORTE F ' \
+          'WHERE ' \
+          'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = {id_witness} AND B.ID = {id_report};'.format(
+        id_witness=id_witness, id_report=id_report)
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
 def queryInsertAction(id_user: int, report: int, action: int):
     sql = 'INSERT INTO ACCIONES_REPORTES(ID, ID_USUARIO, REPORTE, ACCION) VALUES ({id}, {id_user}, {report}, {action});'.format(
         id=(queryNumber() + 1), id_user=id_user, report=report, action=action)
@@ -354,14 +410,14 @@ def queryReportID(id_type_report: int, id_sub_report: int):
 
 def queryHistory(id_report: int):
     sql = 'SELECT ' \
-          'C.ID AS NUMERO, A.NOMBRE, B.ID, C.FECHA AS FECHA, C.COMENTARIO AS TAREA, \'COMENTARIO\' AS TIPO ' \
+          'B.ID, C.ID AS NUMERO, A.NOMBRE, B.ID, C.FECHA AS FECHA, C.COMENTARIO AS TAREA, \'COMENTARIO\' AS TIPO ' \
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, COMENTARIOS_REPORTES C ' \
           'WHERE ' \
           'C.ID_USUARIO = A.ID AND C.REPORTE = B.ID AND B.ID = {id_report} ' \
           'UNION ALL( ' \
           'SELECT ' \
-          'C.ID AS NUMERO, A.NOMBRE, B.ID, C.FECHA AS FECHA, D.ACCION  AS TAREA, \'ACCION\' AS TIPO ' \
+          'B.ID, C.ID AS NUMERO, A.NOMBRE, B.ID, C.FECHA AS FECHA, D.ACCION  AS TAREA, \'ACCION\' AS TIPO ' \
           'FROM ' \
           'USUARIOS_SOPORTE_CABS A, REPORTES_TESTIGOS B, ACCIONES_REPORTES C, CAT_ACCIONES D ' \
           'WHERE ' \

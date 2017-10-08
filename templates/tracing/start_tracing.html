@@ -112,15 +112,6 @@
                     body.highlight(datatable.search());
                 });
 
-                $('a[rel=popover1]').popover({
-                    html: true,
-                    trigger: 'hover',
-                    placement: 'bottom',
-                    content: function () {
-                        return '<img src="' + $(this).data('img') + '" />';
-                    }
-                });
-
                 setInterval(function () {
                     var datatemporary = search();
                     console.log('viewfinder ' + datatemporary);
@@ -148,12 +139,12 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
                 "searchHighlight": true,
-                "scrollX": true,
+                "scrollY": 730,
                 "select": true,
                 "bLengthChange": false,
                 "processing": true,
                 "data": datas,
-                "pageLength": 20,
+                "paging": false,
                 "sDom": '<"row"<"col-sm-3 text-center"f><"col-sm-9 text-center"p>>rti',
                 "columns": [
                     {"data": "NO"},
@@ -184,7 +175,6 @@
                     "targets": [4],
                     "render": function (data, type, row, meta) {
                         var id = row["ID_REPORTE"];
-
                         switch (id) {
                             case 0:
                                 return 'Sin Reporte Activo';
@@ -197,45 +187,45 @@
                             case 4:
                                 return "<img src='{% static 'media/Configuracion_Testigo_WEB/32.png' %}'>";
                             case 5:
-                                return "<img src='{% static 'media/Grabador_Trabado/32.png' %}'>";
+                                return "<img src='{% static 'media/Grabador_Trabado/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 6:
-                                return "<img src='{% static 'media/Grabador_Mala_Calidad/32.png' %}'>";
+                                return "<img src='{% static 'media/Grabador_Mala_Calidad/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 7:
-                                return "<img src='{% static 'media/Grabador_Videos_Pequeños/32.png' %}'>";
+                                return "<img src='{% static 'media/Grabador_Videos_Pequeños/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 8:
-                                return "<img src='{% static 'media/Grabador_No_Graba/32.png' %}'>";
+                                return "<img src='{% static 'media/Grabador_No_Graba/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 9:
-                                return "<img src='{% static 'media/Grabador_Otro/32.png' %}'>";
+                                return "<img src='{% static 'media/Grabador_Otro/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 10:
-                                return "<img src='{% static 'media/Envio_Trabado/32.png' %}'>";
+                                return "<img src='{% static 'media/Envio_Trabado/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 11:
-                                return "<img src='{% static 'media/Envio_Multiple/32.png' %}'>";
+                                return "<img src='{% static 'media/Envio_Multiple/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 12:
-                                return "<img src='{% static 'media/Envio_No_Conecta_Servidor/32.png' %}'>";
+                                return "<img src='{% static 'media/Envio_No_Conecta_Servidor/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 13:
-                                return "<img src='{% static 'media/Envio_Otro/32.png' %}'>";
+                                return "<img src='{% static 'media/Envio_Otro/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 14:
-                                return "<img src='{% static 'media/No_Conecta_VNC/32.png' %}'>";
+                                return "<img src='{% static 'media/No_Conecta_VNC/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 15:
-                                return "<img src='{% static 'media/No_Conecta_Contraseña_No_Conocida/32.png' %}'>";
+                                return "<img src='{% static 'media/No_Conecta_Contraseña_No_Conocida/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 16:
-                                return "<img src='{% static 'media/No_Conecta_Enlace_Lento/32.png' %}'>";
+                                return "<img src='{% static 'media/No_Conecta_Enlace_Lento/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 17:
-                                return "<img src='{% static 'media/No_Conecta_Otro/32.png' %}'>";
+                                return "<img src='{% static 'media/No_Conecta_Otro/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 18:
-                                return "<img src='{% static 'media/Hardware_Sin_Sintonizadores/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_Sin_Sintonizadores/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 19:
-                                return "<img src='{% static 'media/Hardware_Cambio_Tarjeta/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_Cambio_Tarjeta/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 20:
-                                return "<img src='{% static 'media/Hardware_Tarjeta_Dañada/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_Tarjeta_Dañada/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 21:
-                                return "<img src='{% static 'media/Hardware_Disco_Duro_Dañado/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_Disco_Duro_Dañado/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 22:
-                                return "<img src='{% static 'media/Hardware_No_Enciende/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_No_Enciende/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 23:
-                                return "<img src='{% static 'media/Hardware_PC_Trabada/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_PC_Trabada/32.png' %}'>" + RN(row["ID_ESTADO"]);
                             case 24:
-                                return "<img src='{% static 'media/Hardware_Otro/32.png' %}'>";
+                                return "<img src='{% static 'media/Hardware_Otro/32.png' %}'>"  + RN(row["ID_ESTADO"]);
                             default:
                                 return "<a href=\"#\" class=\"alert-link\">" + id + "</a>";
                         }
@@ -254,6 +244,21 @@
                 },
                 "order": [[2, "asc"]]
             });
+        }
+
+        function RN(option) {
+            switch (option) {
+                case 3:
+                    return "<img src='{% static 'media/Reporte_RN/32.png' %}'>";
+                case 4:
+                    return "<img src='{% static 'media/Tarjeta_WIN-TV_Entregada_RN/32.png' %}'>";
+                case 5:
+                    return "<img src='{% static 'media/Disco_Duro_Entregado_RN/32.png' %}'>";
+                case 6:
+                    return "<img src='{% static 'media/CPU_Entregado_RN/32.png' %}'>";
+                default:
+                    return "";
+            }
         }
 
         function search() {

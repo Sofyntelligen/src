@@ -25,9 +25,9 @@
                             {{ data.NOMBRE_TESTIGO }}
                         </div>
                         <div class="col-xl-4">
-                            ID {{ data.ID_TESTIGO }}
+                            ID - {{ data.ID_TESTIGO }}
                             <br>
-                            MUX {{ data.TIPO_MUX }}
+                            MUX - {{ data.TIPO_MUX }}
                         </div>
                     {% endfor %}
                 </div>
@@ -189,18 +189,20 @@
             </div>
             {% if history %}
                 <div class="col-xl-12">
+                    <br>
+                    <br>
+                    <h1>Reportes</h1>
                     <hr>
                 </div>
                 <div class="col-xl-12">
-                    <table class="table cell-border" id="datatable" cellspacing="0"
+                    <table class="table cell-border compact" id="datatable" cellspacing="0"
                            width="100%">
                         <thead>
                         <tr align="center">
+                            <th><strong>CASO</strong></th>
                             <th><strong>TIPO REPORTE</strong></th>
                             <th><strong>SUB REPORTE</strong></th>
-                            <th><strong>ACCION</strong></th>
                             <th><strong>ESTADO</strong></th>
-                            <th><strong>COMENTARIO</strong></th>
                             <th><strong>USUARIO</strong></th>
                             <th><strong>FECHA</strong></th>
                         </tr>
@@ -340,7 +342,7 @@
             function search() {
                 return JSON.parse($.ajax({
                     type: "GET",
-                    url: "{% url 'list_history' %}",
+                    url: "{% url 'list_report' %}",
                     data: {
                         {% for data in witness %}id_witness: {{ data.ID_TESTIGO }}{% endfor %}
                     },
@@ -368,40 +370,47 @@
                     "processing": true,
                     "bFilter": false,
                     "paging": false,
+                    "ordering": false,
+                    "info": false,
                     "data": datas,
-                    "sDom": '<"row"<"col-sm-9 text-center"p>>rti',
+                    "sDom": '<"row"<"col-sm-9 text-center"p>>rt',
                     "columns": [
+                        {"data": "CASO"},
                         {"data": "TIPO_REPORTE"},
                         {"data": "SUB_REPORTE"},
-                        {"data": "ACCION"},
                         {"data": "ESTADO"},
-                        {"data": "COMENTARIO"},
                         {"data": "NOMBRE"},
                         {"data": "FECHA"}
                     ],
                     "columnDefs": [{
                         className: "text-center folio",
-                        "targets": [0]
+                        "targets": [0],
+                        "render": function (data, type, row, meta) {
+                            var id = row["ID"];
+                            return "<a href=\"{% url 'start_history' %}" + id + "\" class=\"alert-link\">" + id + "</a>"
+                        }
                     }, {
                         className: "text-center",
-                        "targets": [1]
+                        "targets": [1],
+                        "width": "20%"
                     }, {
                         className: "text-center",
-                        "targets": [2]
+                        "targets": [2],
+                        "width": "20%"
                     }, {
                         className: "text-center",
-                        "targets": [3]
+                        "targets": [3],
+                        "width": "10%"
                     }, {
                         className: "text-center",
-                        "targets": [4]
+                        "targets": [4],
+                        "width": "30%"
                     }, {
                         className: "text-center",
-                        "targets": [5]
-                    }, {
-                        className: "text-center",
-                        "targets": [6]
+                        "targets": [5],
+                        "width": "20%"
                     }],
-                    "order": [[6, "asc"]]
+                    "order": [[5, "des"]]
                 });
             }
         {% endif %}
@@ -448,7 +457,17 @@
                         alert("No puedes Terminar un Reporte sin que, hayas colocado un comentario sobre su solucion.");
                     }
                 } else {
-                    alert("No puedes Terminar un Reporte sin que hayas, realizado una accion para ello.");
+                    if (getTypeReport() == 1) {
+                        if (getComment() != "null") {
+                            link = "{%  url 'end_report' %}" + getActionReport() + "/" + getState() + "/" + getComment();
+                            $('#message').text("Esta seguro de Terminal el Reporte, del Testigo {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.");
+                            $("#modalmessage").modal('show');
+                        } else {
+                            alert("No puedes Terminar un Reporte de Configuración sin que se haya colocado un comentario del estado del mismo.");
+                        }
+                    } else {
+                        alert("No puedes Terminar un Reporte sin que hayas, realizado una accion para ello.");
+                    }
                 }
             }
 

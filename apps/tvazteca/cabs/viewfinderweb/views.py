@@ -41,8 +41,8 @@ def dateTableViewFinderJSON(request):
     date_monitoring = request.GET.get('date_monitoring')
 
     query = queryTableViewFinder(type_network, type_error, level_alert, date_monitoring)
-    # dates = select(query, 'tvazteca_vidnotd')
-    dates = select(query, 'tvazteca_bloq')
+    dates = select(query, 'tvazteca_vidnotd')
+    #dates = select(query, 'tvazteca_bloq')
 
     for i in range(len(dates)):
         dates[i]['MUX'] = optionMux(dates[i]['MUX'])
@@ -65,8 +65,8 @@ def dateTableViewDetailsJSON(request):
     date_monitoring = request.GET.get('date_monitoring')
 
     query = queryTableViewDetails(id_testigo, date_monitoring)
-    # dates = select(query, 'tvazteca_vidnotd')
-    dates = select(query, 'tvazteca_bloq')
+    dates = select(query, 'tvazteca_vidnotd')
+    #dates = select(query, 'tvazteca_bloq')
 
     for i in range(len(dates)):
         dates[i]['NUM_EVENTO'] = formattTimeSecond(dates[i]['NUM_EVENTO'])
@@ -114,11 +114,11 @@ def dateCheck(request):
                                                     date=date_monitoring)
 
     query = queryCheckTestigoConcentrated(id_testigo, check, date_monitoring)
-    # result1 = queryDLL(query, 'tvazteca_vidnotd')
-    result1 = queryDLL(query, 'tvazteca_bloq')
+    result1 = queryDLL(query, 'tvazteca_vidnotd')
+    #result1 = queryDLL(query, 'tvazteca_bloq')
     query = queryCheckTestigoDetails(id_testigo, date_monitoring)
-    # result2 = queryDLL(query, 'tvazteca_vidnotd')
-    result2 = queryDLL(query, 'tvazteca_bloq')
+    result2 = queryDLL(query, 'tvazteca_vidnotd')
+    #result2 = queryDLL(query, 'tvazteca_bloq')
 
     id = int(request.session['id'])
     browser = getBrowser(request)
