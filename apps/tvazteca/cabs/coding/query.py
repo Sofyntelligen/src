@@ -214,27 +214,25 @@ def queyTableListWitness(channel: int):
           'A.ID = B.ID_USUARIO AND B.ESTADO = C.ID AND B.REPORTE = D.ID AND D.TIPO_REPORTE = E.ID AND D.SUB_REPORTE = F.ID AND B.ID_TESTIGO = TESTIGOS.ID_TESTIGO AND B.ESTADO != 2) AS ID_ESTADO ' \
           'FROM ' \
           'LISTA_TESTIGOS TESTIGOS ' \
-          'WHERE '
 
     if channel == '0':
-        condition = 'GRUPO_TESTIGOS=21 OR ' \
-                    'GRUPO_TESTIGOS=22 OR ' \
-                    'GRUPO_TESTIGOS=23 OR ' \
-                    'GRUPO_TESTIGOS=24 OR ' \
-                    'GRUPO_TESTIGOS=25 OR ' \
-                    'GRUPO_TESTIGOS=26;'
+        condition = ';'
 
     if channel == '1':
-        condition = 'GRUPO_TESTIGOS=21 OR ' \
+        condition = 'WHERE ' \
+                    'GRUPO_TESTIGOS=21 OR ' \
                     'GRUPO_TESTIGOS=23;'
     if channel == '2':
-        condition = 'GRUPO_TESTIGOS=22 OR ' \
+        condition = 'WHERE ' \
+                    'GRUPO_TESTIGOS=22 OR ' \
                     'GRUPO_TESTIGOS=24;'
     if channel == '3':
-        condition = 'GRUPO_TESTIGOS=25;'
+        condition = 'WHERE ' \
+                    'GRUPO_TESTIGOS=25;'
 
     if channel == '4':
-        condition = 'GRUPO_TESTIGOS=26;'
+        condition = 'WHERE ' \
+                    'GRUPO_TESTIGOS=26;'
 
     sql = sql + condition
 
@@ -384,10 +382,9 @@ def queryInsertComment(id_user: int, report: int, comment: str):
 
 
 def queryInsertReport(witness: int, id_user: int, report: int, state: int):
-    id = time.strftime("%d%m%Y") + time.strftime("%H") + time.strftime("%M") + time.strftime("%S")
 
     sql = 'INSERT INTO REPORTES_TESTIGOS(ID, ID_TESTIGO, ID_USUARIO, REPORTE, ESTADO) VALUES ({id}, {witness}, {id_user}, {report}, {state});'.format(
-        id=id, witness=witness, id_user=id_user, report=report, state=state)
+        id=str(queryNumberReport()), witness=witness, id_user=id_user, report=report, state=state)
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
@@ -438,6 +435,21 @@ def queryUpdateReport(state: int, id_report: int):
     return sql
 
 
+def queryListWitness():
+    sql = 'SELECT * FROM LISTA_TESTIGOS;'
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+def queryListUser():
+    sql = 'SELECT * FROM USUARIOS_SOPORTE_CABS;'
+
+    logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
+
+    return sql
+
+
 def queryNumber():
     sql = 'SELECT ' \
           'MAX(ID) AS NUMERO ' \
@@ -450,9 +462,7 @@ def queryNumber():
           'ACCIONES_REPORTES);'
 
     data = select(sql, 'tvazteca_bloq')
-
-    one = ''
-    two = ''
+    # data = select(query, 'tvazteca_vidnotd')
 
     if data[0]['NUMERO'] is not None:
         one = data[0]['NUMERO']
@@ -467,3 +477,26 @@ def queryNumber():
         return int(one)
     else:
         return int(two)
+
+
+def queryNumberReport():
+    date = time.strftime("%y%m%d")
+
+    sql = 'SELECT ' \
+          'COUNT(ID) AS NUMERO ' \
+          'FROM ' \
+          'REPORTES_TESTIGOS ' \
+          'WHERE ' \
+          'ID like \'{date}%\';'.format(date=date)
+
+    data = select(sql, 'tvazteca_bloq')
+    # data = select(query, 'tvazteca_vidnotd')
+
+    if data[0]['NUMERO'] is not None:
+        return date + completeNumberAnyone(int(data[0]['NUMERO']) + 1)
+    else:
+        return date + '0001'
+
+
+
+

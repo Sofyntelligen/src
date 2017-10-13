@@ -195,6 +195,9 @@
             charset="UTF-8"></script>
 
     <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
+
+    <script src="http://code.gijgo.com/1.5.1/js/gijgo.js" type="text/javascript"></script>
+    <link href="http://code.gijgo.com/1.5.1/css/gijgo.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 {% block javascript %}
     <script type="text/javascript" charset="UTF-8">
@@ -206,6 +209,7 @@
 
         var datatable;
         var datatabledatails;
+
 
         $(document).ready(
             function () {
@@ -538,9 +542,7 @@
         function getTypeError() {
             var date = $('select[id=list_error]').val();
             return date;
-        }$("#radios1").change(function (event) {
-                    alert("click fired");
-                });
+        }
 
         function getLevelAlert() {
             var date = $('select[id=list_alert]').val();

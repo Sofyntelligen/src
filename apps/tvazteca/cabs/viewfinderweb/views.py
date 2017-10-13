@@ -14,7 +14,7 @@ from apps.tvazteca.cabs.coding.util import *
 from apps.tvazteca.cabs.login.views import checkValue, ckackCounter
 
 
-# Create your views here. https://gist.github.com/gaspardzul
+# Create your views here.
 # SA or UVI
 
 def startViewFinderWeb(request):

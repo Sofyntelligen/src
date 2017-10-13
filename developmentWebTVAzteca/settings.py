@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.tvazteca.cabs.viewfinderweb',
     'apps.tvazteca.cabs.tracing',
     'apps.tvazteca.cabs.reportwitness',
+    'apps.tvazteca.cabs.metrics',
     'chartjs',
 ]
 

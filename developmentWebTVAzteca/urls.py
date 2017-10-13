@@ -31,4 +31,6 @@ urlpatterns = [
     url(r'^inventario_testigos/inicio/', include('apps.tvazteca.cabs.tracing.urls'), name='tracing'),
     url(r'^inventario_testigos/reporte_testigo/', include('apps.tvazteca.cabs.reportwitness.urls'),
         name='reportwitness'),
+    url(r'^inventario_testigos/metricas/', include('apps.tvazteca.cabs.metrics.urls'),
+        name='metrics'),
 ]

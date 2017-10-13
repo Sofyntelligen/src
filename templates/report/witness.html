@@ -167,12 +167,14 @@
                                 {% if buttom %}
                                     <a class="btn btn-lg btn-warning mr-sm-2" id="1" onclick="javascript:buttonEnd()"
                                        style="color: #ffffff">
-                                        Terminar
+                                        Cerrar
                                     </a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-lg btn-primary mr-sm-2" id="0" onclick="javascript:buttonUpdate()"
                                        style="color: #ffffff">
                                         Modificar
                                     </a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 {% else %}
                                     <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonSave()"
                                        style="color: #ffffff">
@@ -267,31 +269,6 @@
                 $("#list_type_report").change(function () {
                     list_sub_report();
                     list_action_report();
-                });
-
-                $('input[type=checkbox]').change('click', function () {
-                    switch (this.id) {
-                        case "radios1":
-                            $("#radios2").prop("checked", false);
-                            $("#radios3").prop("checked", false);
-                            $("#radios4").prop("checked", false);
-                            break;
-                        case "radios2":
-                            $("#radios1").prop("checked", false);
-                            $("#radios3").prop("checked", false);
-                            $("#radios4").prop("checked", false);
-                            break;
-                        case "radios3":
-                            $("#radios2").prop("checked", false);
-                            $("#radios1").prop("checked", false);
-                            $("#radios4").prop("checked", false);
-                            break;
-                        case "radios4":
-                            $("#radios2").prop("checked", false);
-                            $("#radios3").prop("checked", false);
-                            $("#radios1").prop("checked", false);
-                            break;
-                    }
                 });
                 {% if history %}
                     var data = search();

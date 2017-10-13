@@ -107,6 +107,14 @@ def completeNumber(number):
     return number
 
 
+def completeNumberAnyone(number):
+    number_string = ''
+    for x in range(len(str(number)), 4):
+        number_string += '0'
+    number_string += str(number)
+    return number_string
+
+
 def convertToSecond(hour: int, minute: int, second: int):
     hour = hour * 3600
     minute = minute * 60

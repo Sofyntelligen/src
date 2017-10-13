@@ -1,0 +1,255 @@
+{% extends 'base/body.html' %}
+{% load staticfiles %}
+{% block description %}Metricas o Reportes de actividades con los testigos del sistema.{% endblock %}
+{% block title %}Metricas{% endblock %}
+{% block additionalheadexternalafter %}
+    <link href="{% static 'dist/css/navbar.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="{% static '/jquery/jquery-3.2.1.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static '/dist/js/utils.js' %}" charset="UTF-8"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+{% endblock %}
+{% block headerbutton %}
+    <a class="btn btn-outline-warning mr-sm-2" href="{% url 'start_tracing' %}">
+        Regresar
+    </a>
+{% endblock %}
+{% block section %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <div class="row justify-content-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="option"
+                                       id="radios1" value="1" checked
+                                >
+                                Metrica General
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="option"
+                                       id="radios2" value="2"
+                                >
+                                Metrica Testigos
+                            </label>
+                        </div>
+                        <select id="list_witness"
+                                class="combobox input-large form-control form-control-sm"
+                                name="list_witness" disabled>
+                            <option value="0">-- Seleccionar --</option>
+                            {% for witnes in witness %}
+                                <option value="{{ witnes.INDICE }}">{{ witnes.NOMBRE_TESTIGO }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="option"
+                                       id="radios3" value="3"
+                                >
+                                Metrica Usuarios
+                            </label>
+                        </div>
+                        <select id="list_user"
+                                class="combobox input-large form-control form-control-sm"
+                                name="list_user" disabled>
+                            <option value="0">-- Seleccionar --</option>
+                            {% for user in users %}
+                                <option value="{{ user.NUMERO_EMPLEADO }}">{{ user.NOMBRE }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                Periodo
+                            </label>
+                        </div>
+                        <select id="list_period"
+                                class="combobox input-large form-control form-control-sm"
+                                name="list_period">
+                            <option value="0">
+                                Por D&iacute;a
+                            </option>
+                            <option value="1">
+                                Por Semana
+                            </option>
+                            <option value="2">
+                                Por Mes
+                            </option>
+                            <option value="3" selected="selected">
+                                Por Año
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'start_tracing' %}">Inventario de Testigos</a></li>
+                    <li class="breadcrumb-item">Metricas</li>
+                </ol>
+            </div>
+            <div class="col-xl-12">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6">
+                        <canvas id="general_alert" height="40vw" width="80vw"></canvas>
+                    </div>
+                    <div class="col-xl-6">
+                        <canvas id="general_report" height="40vw" width="80vw"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block additionalfooterexternalbefore %}
+    <script>window.jQuery || document.write('<script src="{%  static '/assets/js/vendor/jquery.min.js' %}"><\/script>')</script>
+{% endblock %}
+{% block additionalfooterexternalafter %}
+    <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static '/dist/js/Chart.js' %}" charset="UTF-8"></script>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" charset="UTF-8">
+
+        /**
+         * Created by Jose Daniel Hernandez Osorio - isc.danielosorio@hotmail.com -
+         * Ingeniero en Sistemas Computacionales.
+         */
+
+        var ctx;
+        var color = Chart.helpers.color;
+        var barChartData = {
+            labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            datasets: [{
+                type: 'bar',
+                label: 'Dataset 1',
+                backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(),
+                borderColor: window.chartColors.red,
+                data: [15, 78, 12, 54, 96, 84, 24, 35, 5, 91, 37, 46]
+            }, {
+                type: 'line',
+                label: 'Dataset 2',
+                backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
+                borderColor: window.chartColors.blue,
+                data: [15, 78, 12, 54, 96, 84, 24, 35, 5, 91, 37, 46]
+            }]
+        };
+
+        $('input[type=checkbox]').change('click', function () {
+            switch (this.id) {
+                case "radios1":
+                    $("#radios2").prop("checked", false);
+                    $("#radios3").prop("checked", false);
+                    $('select[id=list_witness]').prop("disabled", true);
+                    $('select[id=list_user]').prop("disabled", true);
+
+                    break;
+                case "radios2":
+                    $("#radios1").prop("checked", false);
+                    $("#radios3").prop("checked", false);
+                    $('select[id=list_witness]').prop("disabled", false);
+                    $('select[id=list_user]').prop("disabled", true);
+                    break;
+                case "radios3":
+                    $("#radios2").prop("checked", false);
+                    $("#radios1").prop("checked", false);
+                    $('select[id=list_user]').prop("disabled", false);
+                    $('select[id=list_witness]').prop("disabled", true);
+                    break;
+            }
+        });
+
+        function getWitness() {
+            var date = $('select[id=list_witness]').val();
+            return date;
+        }
+
+        function getUser() {
+            var date = $('select[id=list_user]').val();
+            return date;
+        }
+
+        function getPeriod() {
+            var date = $('select[id=list_period]').val();
+            return date;
+        }
+
+        Chart.plugins.register({
+            afterDatasetsDraw: function (chart, easing) {
+                var ctx = chart.ctx;
+
+                chart.data.datasets.forEach(function (dataset, i) {
+                    var meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach(function (element, index) {
+                            ctx.fillStyle = 'rgb(0, 0, 0)';
+
+                            var fontSize = 12;
+                            var fontStyle = 'normal';
+                            var fontFamily = 'Helvetica Neue';
+                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                            var dataString = dataset.data[index].toString();
+
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+
+                            var padding = 5;
+                            var position = element.tooltipPosition();
+                            ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+                        });
+                    }
+                });
+            }
+        });
+
+        window.onload = function () {
+            ctx = document.getElementById("general_alert").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Alertados'
+                    },
+                }
+            });
+            ctx = document.getElementById("general_report").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Reportados'
+                    },
+                }
+            });
+        };
+
+        document.getElementById('randomizeData').addEventListener('click', function () {
+            barChartData.datasets.forEach(function (dataset) {
+                dataset.data = dataset.data.map(function () {
+                    return 1;
+                })
+            });
+            window.myBar.update();
+        });
+    </script>
+{% endblock %}

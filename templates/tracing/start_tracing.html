@@ -8,6 +8,8 @@
     <link href="{% static 'dist/css/jquery.dataTables.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'dist/css/select.dataTables.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'dist/css/dataTables.searchHighlight.css' %}" rel="stylesheet" media="screen">
+
+    <link href="{% static 'dist/css/jquery.webui-popover.css' %}" rel="stylesheet" media="screen">
 {% endblock %}
 {% block headerbutton %}
     <button type="button" class="btn navbar-btn btn-outline-success mr-sm-2"
@@ -15,6 +17,9 @@
     </button>
     <a class="btn btn-outline-info mr-sm-2" href="{% url 'start_viewfinderweb' %}">
         Monitor de Testigos
+    </a>
+    <a class="btn btn-outline-warning mr-sm-2" href="{% url 'start_metrics' %}">
+        Metricas
     </a>
 {% endblock %}
 {% block section %}
@@ -64,6 +69,141 @@
                     </tbody>
                 </table>
             </div>
+            <div id="001">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;Configuraci&oacute;n&nbsp;&nbsp;&nbsp;&nbsp; Grabador</p>
+                    <img src='{% static 'media/Configuracion_Grabador/128.png' %}'></center>
+            </div>
+            <div id="002">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;Configuraci&oacute;n&nbsp;&nbsp;&nbsp;&nbsp; Envio</p>
+                    <img src='{% static 'media/Configuracion_Envio/128.png' %}'></center>
+            </div>
+            <div id="003">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;Configuraci&oacute;n&nbsp;&nbsp;&nbsp;&nbsp; Servidor de Base de
+                    Datos</p>
+                    <img src='{% static 'media/Configuracion_Servidor_BD/128.png' %}'></center>
+            </div>
+            <div id="004">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;Configuraci&oacute;n&nbsp;&nbsp;&nbsp;&nbsp; Probado en Testigos
+                    Web </p>
+                    <img src='{% static 'media/Configuracion_Testigo_WEB/128.png' %}'></center>
+            </div>
+            <div id="005">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grabador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Trabado</p>
+                    <img src='{% static 'media/Grabador_Trabado/128.png' %}'></center>
+            </div>
+            <div id="006">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grabador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Mala Calidad de Señal</p>
+                    <img src='{% static 'media/Grabador_Mala_Calidad/128.png' %}'></center>
+            </div>
+            <div id="007">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grabador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Video Pequeños</p>
+                    <img src='{% static 'media/Grabador_Videos_Pequeños/128.png' %}'></center>
+            </div>
+            <div id="008">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grabador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    No Graba</p>
+                    <img src='{% static 'media/Grabador_No_Graba/128.png' %}'></center>
+            </div>
+            <div id="009">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grabador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Otro</p>
+                    <img src='{% static 'media/Grabador_Otro/128.png' %}'></center>
+            </div>
+            <div id="010">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envio&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Trabado</p>
+                    <img src='{% static 'media/Envio_Trabado/128.png' %}'></center>
+            </div>
+            <div id="011">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envio&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Multiple</p>
+                    <img src='{% static 'media/Envio_Multiple/128.png' %}'></center>
+            </div>
+            <div id="012">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envio&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    No Conecta al Servidor</p>
+                    <img src='{% static 'media/Envio_No_Conecta_Servidor/128.png' %}'></center>
+            </div>
+            <div id="013">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envio&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Otro</p>
+                    <img src='{% static 'media/Envio_Otro/128.png' %}'></center>
+            </div>
+            <div id="014">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;Conecta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    VNC</p>
+                    <img src='{% static 'media/No_Conecta_VNC/128.png' %}'></center>
+            </div>
+            <div id="015">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;Conecta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Contraseña no Conocida</p>
+                    <img src='{% static 'media/No_Conecta_Contraseña_No_Conocida/128.png' %}'></center>
+            </div>
+            <div id="016">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;Conecta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Enlace Lento</p>
+                    <img src='{% static 'media/No_Conecta_Enlace_Lento/128.png' %}'></center>
+            </div>
+            <div id="017">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;Conecta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Otro</p>
+                    <img src='{% static 'media/No_Conecta_Otro/128.png' %}'></center>
+            </div>
+            <div id="018">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Sin Sintonizadores</p>
+                    <img src='{% static 'media/Hardware_Sin_Sintonizadores/128.png' %}'></center>
+            </div>
+            <div id="019">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Cambio Tarjeta WIN-TV</p>
+                    <img src='{% static 'media/Hardware_Cambio_Tarjeta/128.png' %}'></center>
+            </div>
+            <div id="020">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Tarjeta Da&ntilde;ada de WIN-TV</p>
+                    <img src='{% static 'media/Hardware_Tarjeta_Dañada/128.png' %}'></center>
+            </div>
+            <div id="021">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Disco Duro Da&ntilde;ado</p>
+                    <img src='{% static 'media/Hardware_Disco_Duro_Dañado/128.png' %}'></center>
+            </div>
+            <div id="022">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    No Enciende</p>
+                    <img src='{% static 'media/Hardware_No_Enciende/128.png' %}'></center>
+            </div>
+            <div id="023">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    PC Trabada</p>
+                    <img src='{% static 'media/Hardware_PC_Trabada/128.png' %}'></center>
+            </div>
+            <div id="024">
+                <center><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardware&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Otro</p>
+                    <img src='{% static 'media/Hardware_Otro/128.png' %}'></center>
+            </div>
+            <div id="025">
+                <center><p>Reporte RN</p>
+                    <img src='{% static 'media/Reporte_RN/128.png' %}'></center>
+            </div>
+            <div id="026">
+                <center><p>Tarjeta WIN-TV Entregada a RN</p>
+                    <img src='{% static 'media/Tarjeta_WIN-TV_Entregada_RN/128.png' %}'></center>
+            </div>
+            <div id="027">
+                <center><p>Disco Duro Entregado a RN</p>
+                    <img src='{% static 'media/Disco_Duro_Entregado_RN/128.png' %}'></center>
+            </div>
+            <div id="028">
+                <center><p>CPU Entregado a RN</p>
+                    <img src='{% static 'media/CPU_Entregado_RN/128.png' %}'></center>
+            </div>
+
         </div>
     </div>
     </div>
@@ -72,6 +212,8 @@
     <script>window.jQuery || document.write('<script src="{%  static '/assets/js/vendor/jquery.min.js' %}"><\/script>')</script>
 {% endblock %}
 {% block additionalfooterexternalafter %}
+    <script type="text/javascript" src="{% static 'dist/js/jquery.webui-popover.js' %}" charset="UTF-8"></script>
+
     <script type="text/javascript" src="{% static 'dist/js/jquery.dataTables.js' %}" charset="UTF-8"></script>
     <script type="text/javascript" src="{% static 'dist/js/dataTables.select.js' %}" charset="UTF-8"></script>
     <script type="text/javascript" src="{% static 'dist/js/dataTables.searchHighlight.min.js' %}"
@@ -79,7 +221,6 @@
     <script type="text/javascript" src="{% static 'dist/js/jquery.highlight.js' %}" charset="UTF-8"></script>
 
     <script type="text/javascript" src="{% static '/dist/js/bootstrap-combobox.js' %}" charset="UTF-8"></script>
-
 {% endblock %}
 {% block javascript %}
     <script type="text/javascript" charset="UTF-8">
@@ -93,6 +234,34 @@
 
         $(document).ready(
             function () {
+                $('#001').hide();
+                $('#002').hide();
+                $('#003').hide();
+                $('#004').hide();
+                $('#005').hide();
+                $('#006').hide();
+                $('#007').hide();
+                $('#008').hide();
+                $('#009').hide();
+                $('#010').hide();
+                $('#011').hide();
+                $('#012').hide();
+                $('#013').hide();
+                $('#014').hide();
+                $('#015').hide();
+                $('#016').hide();
+                $('#017').hide();
+                $('#018').hide();
+                $('#019').hide();
+                $('#020').hide();
+                $('#021').hide();
+                $('#022').hide();
+                $('#023').hide();
+                $('#024').hide();
+                $('#025').hide();
+                $('#026').hide();
+                $('#027').hide();
+                $('#028').hide();
 
                 $("#list_red").change(function () {
                     var data = getTypeRed();
@@ -140,11 +309,12 @@
                 },
                 "searchHighlight": true,
                 "scrollY": 730,
-                "select": true,
                 "bLengthChange": false,
                 "processing": true,
                 "data": datas,
                 "paging": false,
+                "pagingType": "simple",
+                "destroy": true,
                 "sDom": '<"row"<"col-sm-3 text-center"f><"col-sm-9 text-center"p>>rti',
                 "columns": [
                     {"data": "NO"},
@@ -154,6 +324,37 @@
                     {"data": "ESTADO"},
                     {"data": "REPORTE"}
                 ],
+                "fnInitComplete": function () {
+                    $('a[id=one]').webuiPopover({url: '#001', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=two]').webuiPopover({url: '#002', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=three]').webuiPopover({url: '#003', trigger: 'hover', width: 190, height: 230});
+                    $('a[id=four]').webuiPopover({url: '#004', trigger: 'hover', width: 190, height: 230});
+                    $('a[id=five]').webuiPopover({url: '#005', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=six]').webuiPopover({url: '#006', trigger: 'hover', width: 200, height: 210});
+                    $('a[id=seven]').webuiPopover({url: '#007', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=eight]').webuiPopover({url: '#008', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=nine]').webuiPopover({url: '#009', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=ten]').webuiPopover({url: '#010', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=eleven]').webuiPopover({url: '#011', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twelve]').webuiPopover({url: '#012', trigger: 'hover', width: 190, height: 230});
+                    $('a[id=thirten]').webuiPopover({url: '#013', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=fourten]').webuiPopover({url: '#014', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=fiften]').webuiPopover({url: '#015', trigger: 'hover', width: 190, height: 230});
+                    $('a[id=sixten]').webuiPopover({url: '#016', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=seventen]').webuiPopover({url: '#017', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=eightten]').webuiPopover({url: '#018', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=nineten]').webuiPopover({url: '#019', trigger: 'hover', width: 190, height: 230});
+                    $('a[id=twenty]').webuiPopover({url: '#020', trigger: 'hover', width: 190, height: 230});
+                    $('a[id=twentyone]').webuiPopover({url: '#021', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twentytwo]').webuiPopover({url: '#022', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twentythree]').webuiPopover({url: '#023', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twentyfour]').webuiPopover({url: '#024', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twentyfive]').webuiPopover({url: '#025', trigger: 'hover', width: 190, height: 200});
+                    $('a[id=twentysix]').webuiPopover({url: '#026', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twentyseven]').webuiPopover({url: '#027', trigger: 'hover', width: 190, height: 210});
+                    $('a[id=twentyeigth]').webuiPopover({url: '#028', trigger: 'hover', width: 190, height: 200});
+
+                },
                 "columnDefs": [{
                     className: "text-center folio",
                     "targets": [0],
@@ -179,53 +380,53 @@
                             case 0:
                                 return 'Sin Reporte Activo';
                             case 1:
-                                return "<img src='{% static 'media/Configuracion_Grabador/32.png' %}'>";
+                                return "<a id=\"one\" data-placement=\"right\"><img src='{% static 'media/Configuracion_Grabador/32.png' %}'></a>";
                             case 2:
-                                return "<img src='{% static 'media/Configuracion_Envio/32.png' %}'>";
+                                return "<a id=\"two\" data-placement=\"right\"><img src='{% static 'media/Configuracion_Envio/32.png' %}'></a>";
                             case 3:
-                                return "<img src='{% static 'media/Configuracion_Servidor_BD/32.png' %}'>";
+                                return "<a id=\"three\" data-placement=\"right\"><img src='{% static 'media/Configuracion_Servidor_BD/32.png' %}'></a>";
                             case 4:
-                                return "<img src='{% static 'media/Configuracion_Testigo_WEB/32.png' %}'>";
+                                return "<a id=\"four\" data-placement=\"right\"><img src='{% static 'media/Configuracion_Testigo_WEB/32.png' %}'></a>";
                             case 5:
-                                return "<img src='{% static 'media/Grabador_Trabado/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"five\" data-placement=\"right\"><img src='{% static 'media/Grabador_Trabado/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 6:
-                                return "<img src='{% static 'media/Grabador_Mala_Calidad/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"six\" data-placement=\"right\"><img src='{% static 'media/Grabador_Mala_Calidad/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 7:
-                                return "<img src='{% static 'media/Grabador_Videos_Pequeños/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"seven\" data-placement=\"right\"><img src='{% static 'media/Grabador_Videos_Pequeños/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 8:
-                                return "<img src='{% static 'media/Grabador_No_Graba/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"eight\" data-placement=\"right\"><img src='{% static 'media/Grabador_No_Graba/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 9:
-                                return "<img src='{% static 'media/Grabador_Otro/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"nine\" data-placement=\"right\"><img src='{% static 'media/Grabador_Otro/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 10:
-                                return "<img src='{% static 'media/Envio_Trabado/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"ten\" data-placement=\"right\"><img src='{% static 'media/Envio_Trabado/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 11:
-                                return "<img src='{% static 'media/Envio_Multiple/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"eleven\" data-placement=\"right\"><img src='{% static 'media/Envio_Multiple/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 12:
-                                return "<img src='{% static 'media/Envio_No_Conecta_Servidor/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"twelve\" data-placement=\"right\"><img src='{% static 'media/Envio_No_Conecta_Servidor/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 13:
-                                return "<img src='{% static 'media/Envio_Otro/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"thirten\" data-placement=\"right\"><img src='{% static 'media/Envio_Otro/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 14:
-                                return "<img src='{% static 'media/No_Conecta_VNC/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"fourten\" data-placement=\"right\"><img src='{% static 'media/No_Conecta_VNC/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 15:
-                                return "<img src='{% static 'media/No_Conecta_Contraseña_No_Conocida/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"fiften\" data-placement=\"right\"><img src='{% static 'media/No_Conecta_Contraseña_No_Conocida/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 16:
-                                return "<img src='{% static 'media/No_Conecta_Enlace_Lento/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"sixten\" data-placement=\"right\"><img src='{% static 'media/No_Conecta_Enlace_Lento/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 17:
-                                return "<img src='{% static 'media/No_Conecta_Otro/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"seventen\" data-placement=\"right\"><img src='{% static 'media/No_Conecta_Otro/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 18:
-                                return "<img src='{% static 'media/Hardware_Sin_Sintonizadores/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"eightten\" data-placement=\"right\"><img src='{% static 'media/Hardware_Sin_Sintonizadores/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 19:
-                                return "<img src='{% static 'media/Hardware_Cambio_Tarjeta/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"nineten\" data-placement=\"right\"><img src='{% static 'media/Hardware_Cambio_Tarjeta/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 20:
-                                return "<img src='{% static 'media/Hardware_Tarjeta_Dañada/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"twenty\" data-placement=\"right\"><img src='{% static 'media/Hardware_Tarjeta_Dañada/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 21:
-                                return "<img src='{% static 'media/Hardware_Disco_Duro_Dañado/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"twentyone\" data-placement=\"right\"><img src='{% static 'media/Hardware_Disco_Duro_Dañado/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 22:
-                                return "<img src='{% static 'media/Hardware_No_Enciende/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"twentytwo\" data-placement=\"right\"><img src='{% static 'media/Hardware_No_Enciende/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 23:
-                                return "<img src='{% static 'media/Hardware_PC_Trabada/32.png' %}'>" + RN(row["ID_ESTADO"]);
+                                return "<a id=\"twentythree\" data-placement=\"right\"><img src='{% static 'media/Hardware_PC_Trabada/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             case 24:
-                                return "<img src='{% static 'media/Hardware_Otro/32.png' %}'>"  + RN(row["ID_ESTADO"]);
+                                return "<a id=\"twentyfour\" data-placement=\"right\"><img src='{% static 'media/Hardware_Otro/32.png' %}'></a>" + RN(row["ID_ESTADO"]);
                             default:
                                 return "<a href=\"#\" class=\"alert-link\">" + id + "</a>";
                         }
@@ -239,9 +440,6 @@
                         return "<a href=\"{% url 'start_report_witness' %}" + id + "\" class=\"btn btn-info btn-sm\">Reporte</a>";
                     }
                 }],
-                "select": {
-                    style: "single"
-                },
                 "order": [[2, "asc"]]
             });
         }
@@ -249,13 +447,13 @@
         function RN(option) {
             switch (option) {
                 case 3:
-                    return "<img src='{% static 'media/Reporte_RN/32.png' %}'>";
+                    return "<a id=\"twentyfive\" data-placement=\"right\"><img src='{% static 'media/Reporte_RN/32.png' %}'></a>";
                 case 4:
-                    return "<img src='{% static 'media/Tarjeta_WIN-TV_Entregada_RN/32.png' %}'>";
+                    return "<a id=\"twentysix\" data-placement=\"right\"><img src='{% static 'media/Tarjeta_WIN-TV_Entregada_RN/32.png' %}'></a>";
                 case 5:
-                    return "<img src='{% static 'media/Disco_Duro_Entregado_RN/32.png' %}'>";
+                    return "<a id=\"twentyseven\" data-placement=\"right\"><img src='{% static 'media/Disco_Duro_Entregado_RN/32.png' %}'></a>";
                 case 6:
-                    return "<img src='{% static 'media/CPU_Entregado_RN/32.png' %}'>";
+                    return "<a id=\"twentyeigth\" data-placement=\"right\"><img src='{% static 'media/CPU_Entregado_RN/32.png' %}'></a>";
                 default:
                     return "";
             }
