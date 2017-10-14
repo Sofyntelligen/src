@@ -59,8 +59,52 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <label for="example-text-input" class="col-md-3 text-right">Sub Reporte:</label>
-                                <div class="col-md-9">
+                                <div class="col-md-12" id="div_five">
+                                    <hr>
+                                </div>
+                                <div class="col-md-6" id="div_six">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="option_one"
+                                                   id="radios1"
+                                                   value="0" {% if id_state == 0 %} checked {% endif %}>
+                                            Grabandor
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="div_seven">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="option_two"
+                                                   id="radios2"
+                                                   value="1" {% if id_state == 1 %} checked {% endif %}>
+                                            Envio
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="div_eight">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="option_three"
+                                                   id="radios3"
+                                                   value="2" {% if id_state == 2 %} checked {% endif %}>
+                                            Servidor y Base de datos
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="div_nine">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="option_four"
+                                                   id="radios4"
+                                                   value="3" {% if id_state == 3 %} checked {% endif %}>
+                                            Probado en Testigos Web
+                                        </label>
+                                    </div>
+                                </div>
+                                <label for="example-text-input" class="col-md-3 text-right" id="div_one">Sub
+                                    Reporte:</label>
+                                <div class="col-md-9" id="div_two">
                                     <select id="list_sub_report"
                                             class="combobox input-large form-control form-control-sm"
                                             name="list_sub_report" {% if buttom %}disabled{% endif %}>
@@ -75,8 +119,9 @@
                                         {% endif %}
                                     </select>
                                 </div>
-                                <label for="example-text-input" class="col-md-3 text-right">Accion:</label>
-                                <div class="col-md-9">
+                                <label for="example-text-input" class="col-md-3 text-right"
+                                       id="div_three">Accion:</label>
+                                <div class="col-md-9" id="div_four">
                                     <select id="list_action_report"
                                             class="combobox input-large form-control form-control-sm"
                                             name="list_action_report">
@@ -104,7 +149,7 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option_one"
                                                    id="radios1"
                                                    value="0" {% if id_state == 0 %} checked {% endif %}>
                                             Reporte a RN
@@ -114,7 +159,7 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option_two"
                                                    id="radios2"
                                                    value="1" {% if id_state == 1 %} checked {% endif %}>
                                             Tarjeta WIN-TV entregada a RN
@@ -124,7 +169,7 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option_three"
                                                    id="radios3"
                                                    value="2" {% if id_state == 2 %} checked {% endif %}>
                                             Disco duro entregadio a RN
@@ -134,7 +179,7 @@
                                 <div class="col-md-6">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="option"
+                                            <input class="form-check-input" type="checkbox" name="option_four"
                                                    id="radios4"
                                                    value="3" {% if id_state == 3 %} checked {% endif %}>
                                             CPU entregada a RN
@@ -169,12 +214,14 @@
                                        style="color: #ffffff">
                                         Cerrar
                                     </a>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-lg btn-primary mr-sm-2" id="0" onclick="javascript:buttonUpdate()"
                                        style="color: #ffffff">
                                         Modificar
                                     </a>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 {% else %}
                                     <a class="btn btn-lg btn-primary mr-sm-2" onclick="javascript:buttonSave()"
                                        style="color: #ffffff">
@@ -266,9 +313,37 @@
 
         $(document).ready(
             function () {
+
+                $('#div_five').hide();
+                $('#div_six').hide();
+                $('#div_seven').hide();
+                $('#div_eight').hide();
+                $('#div_nine').hide();
+
                 $("#list_type_report").change(function () {
-                    list_sub_report();
-                    list_action_report();
+                    if (getTypeReport() == 1) {
+                        $('#div_one').hide();
+                        $('#div_two').hide();
+                        $('#div_three').hide();
+                        $('#div_four').hide();
+                        $('#div_five').show();
+                        $('#div_six').show();
+                        $('#div_seven').show();
+                        $('#div_eight').show();
+                        $('#div_nine').show();
+                    } else {
+                        $('#div_one').show();
+                        $('#div_two').show();
+                        $('#div_three').show();
+                        $('#div_four').show();
+                        $('#div_five').hide();
+                        $('#div_six').hide();
+                        $('#div_seven').hide();
+                        $('#div_eight').hide();
+                        $('#div_nine').hide();
+                        list_sub_report();
+                        list_action_report();
+                    }
                 });
                 {% if history %}
                     var data = search();
