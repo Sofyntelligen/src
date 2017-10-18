@@ -388,7 +388,7 @@ def queryInsertReport(witness: int, id_user: int, report: int, state: int):
 
     logging.getLogger('info_logger').info('--- CONSULTA SQL --- ' + sql)
 
-    return {'0': sql, '1': id}
+    return {'0': sql, '1': str(queryNumberReport())}
 
 
 def queryReportID(id_type_report: int, id_sub_report: int):

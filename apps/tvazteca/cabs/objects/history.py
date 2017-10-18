@@ -87,13 +87,17 @@ class History:
     def __insertUpdateEquals(self, registry_update, tarea):
         if tarea:
             if registry_update['TAREA'] == self.comment or self.comment is '' or self.comment is 'N/A':
+                self.addHistory()
                 self.comment = registry_update['TAREA']
             else:
+                self.addHistory()
                 self.comment = registry_update['TAREA']
         else:
             if registry_update['TAREA'] == self.action or self.action is '' or self.action is 'N/A':
+                self.addHistory()
                 self.action = registry_update['TAREA']
             else:
+                self.addHistory()
                 self.action = registry_update['TAREA']
 
     def __notNull(self, data: str):

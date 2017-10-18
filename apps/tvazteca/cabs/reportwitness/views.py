@@ -21,6 +21,7 @@ def startReportWitness(request, id=None):
     logging.getLogger('info_logger').info('--- startReportWitness ---')
 
     request.session['witness'] = id
+    setting = False
 
     if checkValue(request):
         query = queryTypeReport()
@@ -36,23 +37,11 @@ def startReportWitness(request, id=None):
             latest = len(reports) - 1
             if reports[latest]['ESTADO'] != 'FINALIZADO':
                 request.session['id_report'] = reports[latest]['ID_REPORTE']
-                id_state = reports[latest]['ID_ESTADO']
                 id_type_report = reports[latest]['ID_TIPO_REPORTE']
                 id_sub_report = reports[latest]['ID_SUB_REPORTE']
 
-                if int(id_state) > 2:
-                    if id_state == 3:
-                        id_state = 0
-                    if id_state == 4:
-                        id_state = 1
-                    if id_state == 5:
-                        id_state = 2
-                    if id_state == 6:
-                        id_state = 3
-                    request.session['id_state'] = id_state
-                else:
-                    id_state = -1
-                    request.session['id_state'] = -1
+                if id_type_report == 1:
+                    setting = True
 
                 query = querySubReport(id_type_report)
                 # datas = select(query, 'tvazteca_vidnotd')
@@ -67,6 +56,16 @@ def startReportWitness(request, id=None):
                 comment = ''
                 report.append(reports[latest])
                 history = evaluation_history(report).getHistory()
+                print(history)
+
+                option_one_setting = 0
+                option_two_setting = 0
+                option_three_setting = 0
+                option_four_setting = 0
+                option_one = 0
+                option_two = 0
+                option_three = 0
+                option_four = 0
 
                 request.session['id_action'] = -1
                 id_action = 0
@@ -74,10 +73,25 @@ def startReportWitness(request, id=None):
                 for i in range(len(history)):
                     if history[i]['COMENTARIO'] != 'N/A' and history[i]['COMENTARIO'] != comment:
                         comment = comments[history[i]['FECHA']] = history[i]['COMENTARIO']
-                    if history[i]['ACCION'] != history[i]['ESTADO']:
-                        for x in action_report:
-                            if x['ACCION'] == history[i]['ACCION']:
-                                id_action = request.session['id_action'] = x['ID']
+                    if history[i]['ACCION'] == 'GRABADOR':
+                        option_one_setting = 2
+                    if history[i]['ACCION'] == 'ENVIO':
+                        option_two_setting = 3
+                    if history[i]['ACCION'] == 'SERVIDOR Y BASE DE DATOS':
+                        option_three_setting = 4
+                    if history[i]['ACCION'] == 'PROBADO EN TESTIGO WEB':
+                        option_four_setting = 5
+                    if history[i]['ACCION'] == 'REPORTE A RN':
+                        option_one = 6
+                    if history[i]['ACCION'] == 'TARJETA WINTV ESTREGADA A RN':
+                        option_two = 7
+                    if history[i]['ACCION'] == 'DISCO DURO ENTREGADO A RN':
+                        option_three = 8
+                    if history[i]['ACCION'] == 'CPU ENTREGADO A RN':
+                        option_four = 9
+                    for x in action_report:
+                        if x['ACCION'] == history[i]['ACCION']:
+                            id_action = request.session['id_action'] = x['ID']
 
                 details = reports[latest]['FECHA'].strftime('%d/%m/%Y - %H:%M:%S')
                 details += ' por ' + reports[latest]['NOMBRE']
@@ -85,12 +99,16 @@ def startReportWitness(request, id=None):
                               {'type_report': type_report, 'witness': witness, 'history': True, 'buttom': True,
                                'details': details, 'id_type_report': id_type_report, 'sub_report': sub_report,
                                'id_sub_report': id_sub_report, 'action_report': action_report, 'id_action': id_action,
-                               'comments': comments, 'id_state': id_state, })
+                               'comments': comments, 'option_one_setting': option_one_setting,
+                               'option_two_setting': option_two_setting, 'option_three_setting': option_three_setting,
+                               'option_four_setting': option_four_setting, 'option_one': option_one,
+                               'option_two': option_two, 'option_three': option_three,
+                               'option_four': option_four, 'setting': setting})
             else:
                 return render(request, 'report/witness.html',
-                              {'type_report': type_report, 'witness': witness, 'history': True})
+                              {'type_report': type_report, 'witness': witness, 'setting': setting, 'history': True})
         else:
-            return render(request, 'report/witness.html', {'type_report': type_report, 'witness': witness})
+            return render(request, 'report/witness.html', {'type_report': type_report, 'setting': setting, 'witness': witness})
     else:
         return render(request, 'login/start_login.html', {
             'message_warning': 'Para poder crear un reporte de un testigo se necesita iniciar sesión'})
@@ -192,29 +210,15 @@ def insertReportWitness(request):
     if request.method == 'POST':
         id_user = request.session['id']
         witness = request.session['witness']
-        query = queryReportID(request.POST['list_type_report'], request.POST['list_sub_report'])
+        if request.POST['list_sub_report'] == '0':
+            query = queryReportID(request.POST['list_type_report'], 1)
+        else:
+            query = queryReportID(request.POST['list_type_report'], request.POST['list_sub_report'])
         # dates = select(query, 'tvazteca_vidnotd')
         data = select(query, 'tvazteca_bloq')
         report = data[0]['ID']
 
-        try:
-            rn = request.POST['option']
-            if rn == '0':
-                rn = 3
-                red = 2
-            if rn == '1':
-                rn = 4
-                red = 3
-            if rn == '2':
-                rn = 5
-                red = 4
-            if rn == '3':
-                rn = 6
-                red = 5
-        except:
-            rn = 1
-
-        query = queryInsertReport(witness, id_user, report, rn)
+        query = queryInsertReport(witness, id_user, report, 1)
         # dates = select(query, 'tvazteca_vidnotd')
         id_report = query['1']
         queryDLL(query['0'], 'tvazteca_bloq')
@@ -231,8 +235,43 @@ def insertReportWitness(request):
             # dates = select(query, 'tvazteca_vidnotd')
             queryDLL(query, 'tvazteca_bloq')
 
-        if rn != 1:
-            query = queryInsertAction(id_user, id_report, red)
+        if 'option_one_setting' in request.POST:
+            query = queryInsertAction(id_user, id_report, 2)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_two_setting' in request.POST:
+            query = queryInsertAction(id_user, id_report, 3)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_three_setting' in request.POST:
+            query = queryInsertAction(id_user, id_report, 4)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_four_setting' in request.POST:
+            query = queryInsertAction(id_user, id_report, 5)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_one' in request.POST:
+            query = queryInsertAction(id_user, id_report, 6)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_two' in request.POST:
+            query = queryInsertAction(id_user, id_report, 7)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_three' in request.POST:
+            query = queryInsertAction(id_user, id_report, 8)
+            # dates = select(query, 'tvazteca_vidnotd')
+            queryDLL(query, 'tvazteca_bloq')
+
+        if 'option_four' in request.POST:
+            query = queryInsertAction(id_user, id_report, 9)
             # dates = select(query, 'tvazteca_vidnotd')
             queryDLL(query, 'tvazteca_bloq')
 
