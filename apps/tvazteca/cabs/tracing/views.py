@@ -44,6 +44,22 @@ def dateTableTracingJSON(request):
             datas[i]['ID_REPORTE'] = 0
         if datas[i]['ID_ESTADO'] is None:
             datas[i]['ID_ESTADO'] = 0
+        if datas[i]['RN_UNO'] is None:
+            datas[i]['RN_UNO'] = 0
+        if datas[i]['RN_DOS'] is None:
+            datas[i]['RN_DOS'] = 0
+        if datas[i]['RN_TRES'] is None:
+            datas[i]['RN_TRES'] = 0
+        if datas[i]['RN_CUATRO'] is None:
+            datas[i]['RN_CUATRO'] = 0
+        if datas[i]['C_UNO'] is None:
+            datas[i]['C_UNO'] = 0
+        if datas[i]['C_DOS'] is None:
+            datas[i]['C_DOS'] = 0
+        if datas[i]['C_TRES'] is None:
+            datas[i]['C_TRES'] = 0
+        if datas[i]['C_CUATRO'] is None:
+            datas[i]['C_CUATRO'] = 0
     json_data = json.dumps(datas)
 
     return HttpResponse(json_data, content_type='application/json')

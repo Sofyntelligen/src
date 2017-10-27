@@ -76,10 +76,10 @@
                     </div>
                     <div class="col-xl-2">
                         <div class="row">
-                            <div class="col-xl-12">
+                            <div class="col-md-12">
                                 Fecha Monitoreo:
                             </div>
-                            <div class="input-group date form_date col-xl-12"
+                            <div class="input-group date form_date col-md-12"
                                  data-date-format="dd MM yyyy">
                                 <input class="form-control form-control-sm" size="16" type="text" value=""
                                        readonly>
@@ -88,6 +88,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="newSearchPlace" class="col-md-2"></div>
                 </div>
             </div>
             <div class="col-xl-12">
@@ -334,6 +335,9 @@
                     if ((data["TOTAL"] - data["REVISADOS"]) > 10)
                         $(row).addClass('table-danger');
                 },
+                "fnInitComplete": function () {
+                    $("#newSearchPlace").html($(".dataTables_filter"));
+                },
                 "sDom": '<"row"<"col-sm-3 text-center"f><"col-sm-9 text-center"p>>rti',
                 "columns": [
                     {"data": "NO"},
@@ -473,6 +477,7 @@
         }
 
         function search() {
+            $(".dataTables_filter").remove();
             return JSON.parse($.ajax({
                 type: "GET",
                 url: "json_00010",

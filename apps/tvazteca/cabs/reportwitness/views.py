@@ -278,7 +278,7 @@ def insertReportWitness(request):
     return HttpResponseRedirect('/inventario_testigos/inicio/')
 
 
-def updateReport(request, id_action=None, id_state=None, comment=None):
+def updateReport(request, id_action=None, string_option=None, comment=None):
     logging.getLogger('info_logger').info('--- insertReportWitness ---')
 
     id_user = request.session['id']
@@ -294,19 +294,17 @@ def updateReport(request, id_action=None, id_state=None, comment=None):
         # dates = select(query, 'tvazteca_vidnotd')
         queryDLL(query, 'tvazteca_bloq')
 
-    if int(id_state) != int(request.session['id_state']):
-        query = queryUpdateReport(int(id_state) + 3, id_report)
-        # dates = select(query, 'tvazteca_vidnotd')
-        queryDLL(query, 'tvazteca_bloq')
+    if string_option != '0':
+        for option in string_option:
+            if option != ',':
+                query = queryInsertAction(id_user, id_report, int(option))
+                # dates = select(query, 'tvazteca_vidnotd')
+                queryDLL(query, 'tvazteca_bloq')
 
-        query = queryInsertAction(id_user, id_report, int(id_state) + 2)
-        # dates = select(query, 'tvazteca_vidnotd')
-        queryDLL(query, 'tvazteca_bloq')
-
-    return HttpResponseRedirect('/inventario_testigos/inicio/')
+        return HttpResponseRedirect('/inventario_testigos/inicio/')
 
 
-def endReport(request, id_action=None, id_state=None, comment=None):
+def endReport(request, id_action=None, string_option=None, comment=None):
     logging.getLogger('info_logger').info('--- insertReportWitness ---')
 
     id_user = request.session['id']
@@ -326,10 +324,12 @@ def endReport(request, id_action=None, id_state=None, comment=None):
         # dates = select(query, 'tvazteca_vidnotd')
         queryDLL(query, 'tvazteca_bloq')
 
-    if int(id_state) != int(request.session['id_state']):
-        query = queryInsertAction(id_user, id_report, int(id_state) + 2)
-        # dates = select(query, 'tvazteca_vidnotd')
-        queryDLL(query, 'tvazteca_bloq')
+    if string_option != '0':
+        for option in string_option:
+            if option != ',':
+                query = queryInsertAction(id_user, id_report, int(option))
+                # dates = select(query, 'tvazteca_vidnotd')
+                queryDLL(query, 'tvazteca_bloq')
 
     query = queryInsertAction(id_user, id_report, 1)
     # dates = select(query, 'tvazteca_vidnotd')

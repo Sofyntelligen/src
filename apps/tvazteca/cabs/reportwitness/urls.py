@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^json_00070$', listHistory, name='list_history'),
     url(r'^insert_report$', insertReportWitness, name='insert_report'),
     url(r'^end_report/$', endReport, name='end_report'),
-    url(r'^end_report/(?P<id_action>\S+)/(?P<id_state>\S+)/(?P<comment>[^/]+)$', endReport, name='end_report'),
+    url(r'^end_report/(?P<id_action>\S+)/(?P<string_option>\S+)/(?P<comment>[^/]+)$', endReport, name='end_report'),
     url(r'^update_report/$', updateReport, name='update_report'),
-    url(r'^update_report/(?P<id_action>\S+)/(?P<id_state>\S+)/(?P<comment>[^/]+)$', updateReport, name='update_report'),
+    url(r'^update_report/(?P<id_action>\S+)/(?P<string_option>\S+)/(?P<comment>[^/]+)$', updateReport, name='update_report'),
 ]

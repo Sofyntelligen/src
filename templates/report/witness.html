@@ -150,7 +150,7 @@
                                     <div class="form-check">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="option_one"
-                                                   id="radios1"
+                                                   id="radios5"
                                                    value="6" {% if option_one == 6 %} checked {% endif %}>
                                             Reporte a RN
                                         </label>
@@ -160,7 +160,7 @@
                                     <div class="form-check">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="option_two"
-                                                   id="radios2"
+                                                   id="radios6"
                                                    value="7" {% if option_two == 7 %} checked {% endif %}>
                                             Tarjeta WIN-TV entregada a RN
                                         </label>
@@ -170,7 +170,7 @@
                                     <div class="form-check">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="option_three"
-                                                   id="radios3"
+                                                   id="radios7"
                                                    value="8" {% if option_three == 8 %} checked {% endif %}>
                                             Disco duro entregadio a RN
                                         </label>
@@ -180,7 +180,7 @@
                                     <div class="form-check">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="option_four"
-                                                   id="radios4"
+                                                   id="radios8"
                                                    value="9" {% if option_four == 9 %} checked {% endif %}>
                                             CPU entregada a RN
                                         </label>
@@ -505,42 +505,47 @@
             }
         }
 
-        function getState() {
-            var name = document.getElementsByName("option");
-            for (var i = 0; i < name.length; i++) {
-                if (name[i].checked)
-                    return name[i].value;
-            }
-            return -1;
-        }
         {% if buttom %}
+            function getStringOption() {
+                var stringoption = "";
+                $("input:checkbox:checked").each(function () {
+                    if ($(this).val() != {{ option_one_setting }} && $(this).val() != {{ option_two_setting }} && $(this).val() != {{ option_three_setting }} && $(this).val() != {{ option_four_setting }} && $(this).val() != {{ option_one }} && $(this).val() != {{ option_two }} && $(this).val() != {{ option_three }} && $(this).val() != {{ option_four }}) {
+                        stringoption += $(this).val() + ",";
+                    }
+                });
+                if (stringoption == "") {
+                    stringoption = "0";
+                }
+                return stringoption;
+            }
+
             function buttonEnd() {
-                if (getActionReport() != 0 || getState() != -1) {
+                if (getActionReport() != 0 || getStringOption() != "0") {
                     if (getComment() != "null") {
-                        link = "{%  url 'end_report' %}" + getActionReport() + "/" + getState() + "/" + getComment();
+                        link = "{%  url 'end_report' %}" + getActionReport() + "/" + getStringOption() + "/" + getComment();
                         $('#message').text("Esta seguro de Terminal el Reporte, del Testigo {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.");
                         $("#modalmessage").modal('show');
                     } else {
-                        alert("No puedes Terminar un Reporte sin que, hayas colocado un comentario sobre su solucion.");
+                        alert("No puedes Terminar un Reporte sin que, hayas colocado un comentario sobre su solución.");
                     }
                 } else {
                     if (getTypeReport() == 1) {
                         if (getComment() != "null") {
-                            link = "{%  url 'end_report' %}" + getActionReport() + "/" + getState() + "/" + getComment();
+                            link = "{%  url 'end_report' %}" + getActionReport() + "/" + getStringOption() + "/" + getComment();
                             $('#message').text("Esta seguro de Terminal el Reporte, del Testigo {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.");
                             $("#modalmessage").modal('show');
                         } else {
-                            alert("No puedes Terminar un Reporte de Configuración sin que se haya colocado un comentario del estado del mismo.");
+                            alert("No puedes Terminar un Reporte de Configuración sin que, haya colocado un comentario del estado del mismo.");
                         }
                     } else {
-                        alert("No puedes Terminar un Reporte sin que hayas, realizado una accion para ello.");
+                        alert("No puedes Terminar un Reporte sin que hayas, realizado una accion para su solución.");
                     }
                 }
             }
 
             function buttonUpdate() {
-                if (getComment() != "null" || getActionReport() != {{ id_action }} || getState() != {{ option_one_setting }}) {
-                    link = "{%  url 'update_report' %}" + getActionReport() + "/" + getState() + "/" + getComment();
+                if (getComment() != "null" || getActionReport() != {{ id_action }} || getStringOption() != "0") {
+                    link = "{%  url 'update_report' %}" + getActionReport() + "/" + getStringOption() + "/" + getComment();
                     $('#message').text("Esta seguro de Modificar el Reporte, del Testigo {% for data in witness %}{{ data.NOMBRE_TESTIGO }}{% endfor %}.");
                     $("#modalmessage").modal('show');
                 } else {
